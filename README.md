@@ -35,3 +35,10 @@ Front-end Development The front-end (browser) will be developed in JavaScript an
 For visualization purposes, we will make use of JavaScript frameworks. For carrying out operations pertaining to the Natural Language Processing (NLP) part of our implementation, viz. computing the Levenshtein’s distance, we will be using the already available JavaScript libraries instead of re-inventing the wheel.
 
 Back-end Development The back-end (database) will be developed in PL/SQL and MySQL. 
+
+##TO DO:
+
+* Design Database
+* Load starting poems into database
+* Demo frontend visualization
+* API signatures

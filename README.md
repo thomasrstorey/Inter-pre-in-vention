@@ -2,7 +2,7 @@
 
 ##Concept
 
-Writing and reading are collaborative and social behaviors. Language is a commons that is constituted by the community of language practitioners. We literally create language when we practice it together by reading, speaking, listening and writing. Technologies of language practice, be they oral, literary, or electrate in nature, form the vectors along which language enters the public sphere, giving it the potential to change and morph. As a product of the public, language is defined by accident, happenstance, and the various confluences of existing vectors, forces and states in human systems.
+Writing and reading are collaborative and social behaviors. Language is a commons that is constituted by the community of language practitioners[1](http://amodern.net/article/terms-of-reference-vectoralist-transgressions/). We literally create language when we practice it together by reading, speaking, listening and writing. Technologies of language practice, be they oral, literary, or electrate in nature, form the vectors along which language enters the public sphere, giving it the potential to change and morph. As a product of the public, language is defined by accident, happenstance, and the various confluences of existing vectors, forces and states in human systems.
 
 How can new systems of technological and cultural production change the ways we use language? When writing and reading are fully exposed and made available by the technical apparatus, what new patterns of meaning-making can emerge? As network and computational technologies become more powerful and available, how can their prosthetic, cybernetic functions change the way we write, read, and make inscription upon the commons of language?
 

@@ -14,4 +14,4 @@ In this project, tentatively titled Inter(pre|in)vention, we propose a performat
 
 Each newly generated poem will be compared against its parent and sibling poems to find where it differs. These differences will drive the re-interpretation of the child poems by searching for the words on the Internet and/or our database of stored poems to find related words and texts. This feedback loop, contextually reseeding each new poem, will progress/regress each branch in radically different directions. 
 
-![figure 1](http://pcluster.cise.ufl.edu/dokuwiki/lib/exe/fetch.php?cache=&media=wiki:group:workgroup_5:treediagram.png "Figure 1")
+![figure 1](https://raw.githubusercontent.com/thomasrstorey/Inter-pre-in-vention/master/images/treediagram.png "Figure 1")

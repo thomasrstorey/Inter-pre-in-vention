@@ -1,0 +1,9 @@
+{
+  "name": "Inter-pre-in-vention",
+  "main": "nodeserver.js",
+  "dependencies": {
+    "body-parser": "^1.12.0",
+    "express": "^4.12.2",
+    "method-override": "^2.3.2"
+  }
+}

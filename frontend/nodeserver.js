@@ -18,3 +18,4 @@ require('./routes.js')(app);
 //start server
 console.log("listening on port: " + port);
 app.listen(port);
+module.exports = app;

@@ -1,13 +1,13 @@
-angular.module('app.routes', []).config(['$routeProvider', '$locationProvider', 
+angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', 
 	function($routeProvider, $locationProvider) {
 		$routeProvider
-			.when('/', {
-				templateUrl: 'home/homeView.html',
-				controller: 'HomeController'
-			})
-			.when('/tree*', {
-				templateUrl: 'tree/treeView.html',
+			.when('/tree/:uid', {
+				templateUrl: 'app/components/tree/treeView.html',
 				controller: 'TreeController'
+			})
+			.when('/', {
+				templateUrl: 'app/components/home/homeView.html',
+				controller: 'HomeController'
 			});
 			$locationProvider.html5Mode(true);
 	}]);

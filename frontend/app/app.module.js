@@ -1,4 +1,4 @@
 angular.module('InterPreInVentionApp', ['ngRoute',
- 										'app.routes',
+										'appRoutes',
  										'HomeCtrl',
  										'TreeCtrl' ]);

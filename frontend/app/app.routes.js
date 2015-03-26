@@ -5,6 +5,10 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider',
 				templateUrl: 'app/components/tree/treeView.html',
 				controller: 'TreeController'
 			})
+			.when('/reader/:uid', {
+				templateUrl: 'app/components/reader/readerView.html',
+				controller: 'ReaderController'
+			})
 			.when('/', {
 				templateUrl: 'app/components/home/homeView.html',
 				controller: 'HomeController'

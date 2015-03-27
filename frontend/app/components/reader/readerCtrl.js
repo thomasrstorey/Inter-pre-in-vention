@@ -1,6 +1,6 @@
 angular.module('ReaderCtrl', [])
 	.controller('ReaderController',
-		["$scope", "$http", "$routeParams", function ($scope, $http, $routeParams) {
+		["$scope", "$http", "$routeParams", "$location", function ($scope, $http, $routeParams, $location) {
 			$scope.pid = $routeParams.pid;
 			$scope.inpoem = "";
 			$scope.formattedStart = "";
@@ -19,13 +19,22 @@ angular.module('ReaderCtrl', [])
 			$scope.formattedResult = "";
 			$scope.listening = false;
 			$scope.togglemsg = "listen";
+			$scope.disable = true;
 
 			$scope.format = function (string) {
 				$scope.formattedResult = toHTML(string);
 			}
 
 			$scope.addPoem = function () {
-
+				$http.post('/api/poems/add', {poem: $scope.result})
+					.success(function (data, status) {
+						console.log("poem sent");
+						$location.path('/');
+					})
+					.error(function (data, status) {
+						console.log("error while sending new poem");
+						$location.path('/');
+					});
 			};
 
 			//utility functions============================
@@ -48,32 +57,6 @@ angular.module('ReaderCtrl', [])
 		[function () {
 			return {
 				link: function (scope, elem, attr) {
-			    	//get audio stream =============================================
-			    	/*var acontext = new (window.AudioContext || window.webkitAudioContext)();
-
-			    	navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia);
-					if (navigator.getUserMedia) {
-					   navigator.getUserMedia (
-
-					      // constraints
-					      {
-					         audio: true
-					      },
-
-					      // successCallback
-					      function(stream) {
-					         source = acontext.createMediaStreamSource(stream);
-					         source.connect
-					      },
-
-					      // errorCallback
-					      function(err) {
-					         console.log("The following error occured: " + err);
-					      }
-					   );
-					} else {
-					   console.log("getUserMedia not supported");
-					}*/
 
 					//web speech api, recognition ===================================
 			    	if('webkitSpeechRecognition' in window){
@@ -85,7 +68,6 @@ angular.module('ReaderCtrl', [])
 			    	var recognition = new webkitSpeechRecognition();
 			    	var finalTranscript = "";
 			    	var toid;
-			    	var iid;
 		    		recognition.continuous = true;
 		    		recognition.interimResults = true;
 
@@ -94,12 +76,6 @@ angular.module('ReaderCtrl', [])
 			    	recognition.onstart = function () {
 			    		
 						console.log("start");
-
-						/*iid = window.setInterval(function () {
-							scope.$apply(function () {
-								scope.result += " * ";
-							}) 
-						}, 6000);*/
 			    	}
 
 			    	recognition.onresult = function (event) {
@@ -133,7 +109,6 @@ angular.module('ReaderCtrl', [])
 			    	}
 
 			    	recognition.onend = function () {
-			    		window.clearInterval(iid);
 			    		console.log("end");
 			    	}
 
@@ -142,6 +117,7 @@ angular.module('ReaderCtrl', [])
 								scope.$apply(function () {
 									scope.togglemsg = "Listen";
 									scope.listening = false;
+									scope.disable = false;
 								});
 				    			recognition.stop();
 				    			return;
@@ -149,6 +125,7 @@ angular.module('ReaderCtrl', [])
 				    	scope.$apply(function () {
 							scope.listening = true;
 			    		    scope.togglemsg = "Stop listening";
+			    		    scope.disable = true;
 						});
 			    		recognition.lang = "en-US";
 			    		recognition.start();

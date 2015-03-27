@@ -7,3 +7,12 @@ body{
 	width: 100%;
 	height: 100%;
 }
+
+#send-button{
+	float: right;
+}
+
+#send-button:disabled{
+	color: #bbb;
+	border: 1px solid #ddd;
+}

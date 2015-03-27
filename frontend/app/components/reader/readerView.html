@@ -1,12 +1,12 @@
 <div class="row">
-<button id="startButton" onclick="startButton(event)">Listen</button>
+<h1>Inter(pre|in)vention</h1>
+<button id="listenToggle" listener>{{togglemsg}}</button>
 </div>
 <div class="row" id="poems">
-	<div class="eight columns" id="prompt">
-	<span>{{inpoem}}</span>
+	<div class="six columns" id="prompt">
+	<span ng-bind-html="formattedStart"></span>
 	</div>
-
-	<div class="eight columns" id="result">
-	<span id="finalSpan"></span><span id="interimSpan"></span>
+	<div class="six columns" id="result">
+	<span ng-bind-html="formattedResult"></span>
 	</div>
 </div>

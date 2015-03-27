@@ -1,11 +1,11 @@
 angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', 
 	function($routeProvider, $locationProvider) {
 		$routeProvider
-			.when('/tree/:uid', {
+			.when('/tree/:pid', {
 				templateUrl: 'app/components/tree/treeView.html',
 				controller: 'TreeController'
 			})
-			.when('/reader/:uid', {
+			.when('/reader/:pid', {
 				templateUrl: 'app/components/reader/readerView.html',
 				controller: 'ReaderController'
 			})

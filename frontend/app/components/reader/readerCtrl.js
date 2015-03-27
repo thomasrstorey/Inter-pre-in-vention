@@ -1,90 +1,158 @@
 angular.module('ReaderCtrl', [])
 	.controller('ReaderController',
 		["$scope", "$http", "$routeParams", function ($scope, $http, $routeParams) {
-			$scope.uid = $routeParams.uid;
+			$scope.pid = $routeParams.pid;
 			$scope.inpoem = "";
+			$scope.formattedStart = "";
 			$scope.outpoem = "";
-			$http.get('/api/poem/'+$scope.uid)
+			$http.get('/api/poems/'+$scope.pid)
 				.success(function (data) {
 					$scope.inpoem = data;
+					$scope.formattedStart = toHTML(data);
 				})
 				.error(function (data) {
 					console.log("Error: " + data);
 				});
 
-			$scope.listen = function () {
+			$scope.result = "";
+			$scope.interim = "";
+			$scope.formattedResult = "";
+			$scope.listening = false;
+			$scope.togglemsg = "listen";
 
+			$scope.format = function (string) {
+				$scope.formattedResult = toHTML(string);
 			}
 
-			//utility functions
+			$scope.addPoem = function () {
+
+			};
+
+			//utility functions============================
 			var toHTML = function(string){
 				//cap with <p> and </p>
 				//replace /n with </br>
+				var lines = string.split("\n");
+				var formattedLines = [];
+				lines.forEach(function (v, i, arr){
+					formattedLines.push("<p>"+v+"</p>");
+				});
+				return formattedLines.join("\n");
 			}
+
+
+
 		}])
 	.directive(
 		"listener",
 		[function () {
 			return {
 				link: function (scope, elem, attr) {
-					//web-speech api code goes here
-					//make two divs, one holds the inpoem, the other the outpoem
-					var resultPoem;
-				    var interimPoem;
-				    document.addEventListener ("DOMContentLoaded", function(event) {
-				    	resultPoem = document.getElementById("finalSpan");
-				    	interimPoem = document.getElementById("interimSpan");
-				    });
+			    	//get audio stream =============================================
+			    	/*var acontext = new (window.AudioContext || window.webkitAudioContext)();
 
-				    	if('webkitSpeechRecognition' in window){
-				    		console.log("yay");
-				    	} else {
-				    		console.log("boo");
-				    	}
-				    	var recognition = new webkitSpeechRecognition();
-				    	var finalTranscript;
-				    	
-			    		recognition.continuous = true;
-			    		recognition.interimResults = true;
+			    	navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia);
+					if (navigator.getUserMedia) {
+					   navigator.getUserMedia (
 
-				    	recognition.onstart = function () {
-							console.log("start");
-				    	}
+					      // constraints
+					      {
+					         audio: true
+					      },
 
-				    	recognition.onresult = function (event) {
-				    		var interimTranscript = '';
-				    		console.log("result");
-				    		for(var i = event.resultIndex; i < event.results.length; ++i){
-				    			if(event.results[i].isFinal) {
-				    				finalTranscript += event.results[i][0].transcript;
-				    			} else {
-				    				interimTranscript += event.results[i][0].transcript;
-				    			}
-				    			
-				    			resultPoem.innerHTML = linebreak(finalTranscript);
-				    			interimPoem.innerHTML = linebreak(interimTranscript);
+					      // successCallback
+					      function(stream) {
+					         source = acontext.createMediaStreamSource(stream);
+					         source.connect
+					      },
+
+					      // errorCallback
+					      function(err) {
+					         console.log("The following error occured: " + err);
+					      }
+					   );
+					} else {
+					   console.log("getUserMedia not supported");
+					}*/
+
+					//web speech api, recognition ===================================
+			    	if('webkitSpeechRecognition' in window){
+			    		console.log("yay");
+			    	} else {
+			    		console.log("boo");
+			    	}
+
+			    	var recognition = new webkitSpeechRecognition();
+			    	var finalTranscript = "";
+			    	var toid;
+			    	var iid;
+		    		recognition.continuous = true;
+		    		recognition.interimResults = true;
+
+
+
+			    	recognition.onstart = function () {
+			    		
+						console.log("start");
+
+						/*iid = window.setInterval(function () {
+							scope.$apply(function () {
+								scope.result += " * ";
+							}) 
+						}, 6000);*/
+			    	}
+
+			    	recognition.onresult = function (event) {
+			    		
+			    		var interimTranscript = '';
+			    		console.log("result");
+			    		for(var i = event.resultIndex; i < event.results.length; ++i){
+			    			if(event.results[i].isFinal) {
+			    				finalTranscript += event.results[i][0].transcript;
+			    				//pause timeout
+					    		if(toid){
+					    			window.clearTimeout(toid);
+					    		}
+					    		toid = window.setTimeout(function () {
+					    			finalTranscript += "\n"; //add new line after 1 second pause
+					    		}, 10);
+			    			} else {
+			    				interimTranscript += event.results[i][0].transcript;
+			    			}
+
+			    			scope.$apply(function () {
+			    				scope.result = finalTranscript;
+			    			    scope.interim = interimTranscript;
+			    			    scope.format(scope.result + scope.interim);
+			    			});
+			    		}
+			    	}
+
+			    	recognition.onerror = function (e) {
+			    		console.log(e.error);
+			    	}
+
+			    	recognition.onend = function () {
+			    		window.clearInterval(iid);
+			    		console.log("end");
+			    	}
+
+			    	elem.bind ("click", function () {
+						if(scope.listening){
+								scope.$apply(function () {
+									scope.togglemsg = "Listen";
+									scope.listening = false;
+								});
+				    			recognition.stop();
+				    			return;
 				    		}
-				    	}
-
-				    	recognition.onerror = function () {
-
-				    	}
-
-				    	recognition.onend = function () {
-
-				    	}
-
-				    	var startButton = function (event) {
-				    		finalTranscript = '';
-				    		recognition.lang = "en-US";
-				    		recognition.start();
-				    	}
-
-				    	var two_line = /\n\n/g;
-						var one_line = /\n/g;
-						var linebreak = function (s) {
-						  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-						}
+				    	scope.$apply(function () {
+							scope.listening = true;
+			    		    scope.togglemsg = "Stop listening";
+						});
+			    		recognition.lang = "en-US";
+			    		recognition.start();
+					});
 				}
 			}
 		}]);

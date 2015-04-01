@@ -22,6 +22,9 @@ app.use(function(req, res, next) {
 
 var port = process.env.PORT || 8989;
 
+//Routes addition
+require('./routes')(app);
+
 //start server
 console.log("listening on port: " + port);
 app.listen(port);

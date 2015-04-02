@@ -1,4 +1,4 @@
-*** This file contain the following structure of file system under it ***
+*** This file contains the following structure of data files stored under it ***
 
 --/data/
 --------/original_poems_index.json

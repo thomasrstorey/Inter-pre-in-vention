@@ -1,7 +1,7 @@
 angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', 
 	function($routeProvider, $locationProvider) {
 		$routeProvider
-			.when('/tree/:pid', {
+			.when('/tree/', {
 				templateUrl: 'app/components/tree/treeView.html',
 				controller: 'TreeController'
 			})

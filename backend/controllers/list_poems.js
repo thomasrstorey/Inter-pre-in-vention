@@ -19,9 +19,12 @@ exports.generatePoemFiles = function(req,res) {
 
 	// Local File system library
 	var Store = require('jfs');
-	var db = new Store('data');
+	var db = new Store('data/originalpoems');
 	var _ = require('lodash');
+	var uid = require('uid');
+	var fs = require('fs-extra');
 
+	/**
 	var d = {
 		foo: "bar"
 	};
@@ -29,12 +32,48 @@ exports.generatePoemFiles = function(req,res) {
 	db.save("testJSON", d, function(err){
 	  // now the data is stored in the file data/anId.json
 	});
+	
 
-	var poemsJSON = require('../data/SourcePoems.json');
-
-	_.forEach({ 'a': 1, 'b': 2 }, function(n) {
-		console.log(n);
+	_.forEach({ 'a': 1, 'b': 2 }, function(n,key) {
+		db.save("test"+ key, n, function(err){
+		  // now the data is stored in the file data/anId.json
+		});
 	});
 
-	//res.send("Poem Generation success!!");
+	**/
+
+	var poemsJSON = require('../data/SourcePoems.json');
+	var numFilesGenerated = 0;
+
+	_.forEach(poemsJSON, function(n,key) {
+		var current_poem = n;
+		var poemFileSaved = false;
+
+		try{
+			do{
+				var upid = uid(20);
+				var file = '../data/originalpoems/'+upid+'.json';
+				fs.ensureFile(file, function (err) {
+					//console.log("File does not exist");
+					n.pid = upid;
+					n.links = [];
+					db.save(n.pid, n, function(err){
+						if(err){
+							console.log("Error occurred while saving poem file: "+ n.title);
+						}
+					});
+				});
+				numFilesGenerated = numFilesGenerated+1;
+				poemFileSaved = true;
+				//console.log(numFilesGenerated);
+			}while(!poemFileSaved);
+		}
+		catch(e){
+			console.log('Unexpected error occurred' + e);
+		}
+	});
+
+	var Output = {"numFilesGenerated": numFilesGenerated,"type": 'JSON'};
+
+	res.send(Output);
 }

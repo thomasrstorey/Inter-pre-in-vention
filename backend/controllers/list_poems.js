@@ -19,7 +19,7 @@ exports.generatePoemFiles = function(req,res) {
 
 	// Local File system library
 	var Store = require('jfs');
-	var db = new Store('data/originalpoems');
+	var db = new Store('data/originalpoems',{pretty:true});
 	var _ = require('lodash');
 	var uid = require('uid');
 	var fs = require('fs-extra');

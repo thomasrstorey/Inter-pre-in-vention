@@ -44,10 +44,12 @@ exports.generatePoemFiles = function(req,res) {
 
 	var poemsJSON = require('../data/SourcePoems.json');
 	var numFilesGenerated = 0;
+	var originalpoem_index = new Array();
 
 	_.forEach(poemsJSON, function(n,key) {
 		var current_poem = n;
 		var poemFileSaved = false;
+		var poem_index = new Object();
 
 		try{
 			do{
@@ -56,6 +58,8 @@ exports.generatePoemFiles = function(req,res) {
 				fs.ensureFile(file, function (err) {
 					//console.log("File does not exist");
 					n.pid = upid;
+					n.children = [];
+					n.userdata = [];
 					n.links = [];
 					db.save(n.pid, n, function(err){
 						if(err){
@@ -65,15 +69,23 @@ exports.generatePoemFiles = function(req,res) {
 				});
 				numFilesGenerated = numFilesGenerated+1;
 				poemFileSaved = true;
+				poem_index["pid"] = upid;
+				originalpoem_index.push(poem_index);
+				
 				//console.log(numFilesGenerated);
 			}while(!poemFileSaved);
+			db.save("index", originalpoem_index, function(err){
+				if(err){
+					console.log("Error occurred while saving poem index file: ");
+				}
+			});
 		}
 		catch(e){
 			console.log('Unexpected error occurred' + e);
 		}
 	});
 
-	var Output = {"numFilesGenerated": numFilesGenerated,"type": 'JSON'};
+	var Output = {"numFilesGenerated": numFilesGenerated,"type": "JSON", "indexFile": "originalpoem_index.JSON"};
 
 	res.send(Output);
 }

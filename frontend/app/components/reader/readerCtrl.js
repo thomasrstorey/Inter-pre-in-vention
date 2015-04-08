@@ -18,7 +18,8 @@ angular.module('ReaderCtrl', [])
 			$scope.interim = "";
 			$scope.formattedResult = "";
 			$scope.listening = false;
-			$scope.togglemsg = "listen";
+			$scope.toggleicon = "fa fa-microphone";
+			$scope.togglemsg = 'Listen';
 			$scope.disable = true;
 
 			$scope.format = function (string) {
@@ -119,7 +120,8 @@ angular.module('ReaderCtrl', [])
 			    	elem.bind ("click", function () {
 						if(scope.listening){
 								scope.$apply(function () {
-									scope.togglemsg = "Listen";
+									scope.togglemsg = 'Listen';
+									scope.toggleicon = "fa fa-microphone";
 									scope.listening = false;
 									scope.disable = false;
 								});
@@ -128,7 +130,8 @@ angular.module('ReaderCtrl', [])
 				    		}
 				    	scope.$apply(function () {
 							scope.listening = true;
-			    		    scope.togglemsg = "Stop listening";
+							scope.toggleicon = 'fa fa-microphone-slash';
+			    		    scope.togglemsg = 'Stop listening';
 			    		    scope.disable = true;
 						});
 			    		recognition.lang = "en-US";

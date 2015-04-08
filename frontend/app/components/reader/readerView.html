@@ -1,18 +1,15 @@
-<div class="row">
-<h1>Inter(pre|in)vention</h1>
 
-</div>
 <div class="row" id="poems">
-	<div class="six columns" id="prompt">
+	<div class="two-thirds column" id="prompt">
 	<div class="row">
-	<button id="back-button" ng-click="backToTree()">Back To Tree</button>
-	<button id="listenToggle" listener>{{togglemsg}}</button>
+	<button id="back-button" ng-click="backToTree()"><i class="fa fa-chevron-left"></i></button>
+	<button id="listenToggle" listener><i ng-class="toggleicon"></i> {{togglemsg}}</button>
 	</div>
 	<span ng-bind-html="formattedStart"></span>
 	</div>
-	<div class="six columns" id="result">
+	<div class="one-third column" id="result">
 	<div class="row">
-	<button id="send-button" ng-click="addPoem()" ng-disabled="disable">Send Poem</button>
+	<button id="send-button" ng-click="addPoem()" ng-disabled="disable"><i class="fa fa-paper-plane-o"></i> Send Poem</button>
 	</div>
 	<div class="row">
 	<span ng-bind-html="formattedResult"></span>

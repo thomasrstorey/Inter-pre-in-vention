@@ -62,7 +62,9 @@ angular.module('TreeCtrl', [])
 							    .on("zoom", zoomed);
 
 					var width = elem[0].clientWidth,
-						height = window.innerHeight;
+						height = window.innerHeight-160;
+
+					
 
 					var force = d3.layout.force();
 
@@ -75,7 +77,19 @@ angular.module('TreeCtrl', [])
 					    .attr("width", width)
 					    .attr("height", height)
 					    .style("fill", "none");	
-					    
+					  
+					function resize () {
+						var width = elem[0].clientWidth,
+							height = window.innerHeight-160;
+				    	svg
+				    		.attr("width", width)
+				    		.attr("height", height);
+				    	container
+				    		.attr("width", width)
+				    		.attr("height", height);
+				    }
+
+				    window.onresize = resize; 
 
 					var link = container.selectAll(".link");
 					var node = container.selectAll(".node");
@@ -161,6 +175,8 @@ angular.module('TreeCtrl', [])
 								force.start();
 							});
 				    }
+
+
 				    update();
 				}
 			}

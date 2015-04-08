@@ -1,4 +1,14 @@
 <div class="row">
 <h1>Inter(pre|in)vention</h1>
-<div id="tree-container" tree-canvas="tree"></div>
+</div>
+<div class="row">
+	<div class="two-thirds column">
+		<div id="tree-container" tree-canvas></div>
+	</div>
+	<div class="one-third column">
+		<h3>{{currentTitle}}</h3>
+		<button id="read-button" ng-click="readPoem()" ng-disabled="disable">Read Poem</button>
+		<div id="tree-sidebar" tree-sidebar></div>
+	</div>
+</div>
 </div>

@@ -1,6 +1,8 @@
+
 body{
 	margin: 0px;
 	overflow: hidden;
+	height: 100%;
 }
 
 #tree-container{
@@ -9,10 +11,17 @@ body{
 }
 
 #send-button{
-	float: right;
 }
 
 #send-button:disabled{
+	color: #bbb;
+	border: 1px solid #ddd;
+}
+
+#read-button{
+}
+
+#read-button:disabled{
 	color: #bbb;
 	border: 1px solid #ddd;
 }

@@ -7,6 +7,9 @@ angular.module('TreeCtrl', [])
 			$scope.links = [];
 			$scope.distsList = [];
 			$scope.dists = [];
+			$scope.currentTitle = "Choose a poem";
+			$scope.currentpid = null;
+			$scope.disable = true;
 			//Format JSON for d3 Force
 			$http.get('/api/poems_list/')
 				.success(function (data) {
@@ -31,6 +34,20 @@ angular.module('TreeCtrl', [])
 				.error(function (err) {
 					console.log("Error: " + err);
 				})
+
+			$scope.setTitle = function (pid) {
+				$http.get('api/poems/'+pid)
+					.success(function (data) {
+						$scope.currentTitle = data.title;
+					})
+					.error(function (err) {
+						console.log("Error: " + err);
+					})
+			}
+
+			$scope.readPoem = function () {
+				$location.path("/reader/" + $scope.currentpid);
+			}
 			
 	}])	
 	.directive(
@@ -39,14 +56,30 @@ angular.module('TreeCtrl', [])
 			return {
 				link: function (scope, elem, attr) {
 					var l = scope.links.length;
-					var width = window.innerWidth,
+
+					var zoom = d3.behavior.zoom()
+							    .scaleExtent([-1, 10])
+							    .on("zoom", zoomed);
+
+					var width = elem[0].clientWidth,
 						height = window.innerHeight;
+
 					var force = d3.layout.force();
-					var svg = d3.select("body").append("svg")
+
+					var svg = d3.select("#tree-container").append("svg")
 						.attr("width", width)
-						.attr("height", height);
-					var link = svg.selectAll(".link");
-					var node = svg.selectAll(".node");
+						.attr("height", height)
+						.call(zoom);
+
+					var container = svg.append("g")
+					    .attr("width", width)
+					    .attr("height", height)
+					    .style("fill", "none");	
+					    
+
+					var link = container.selectAll(".link");
+					var node = container.selectAll(".node");
+
 					scope.$watchGroup(['nodes','links'], function () {
 						console.log(scope.links);
 						update();
@@ -66,6 +99,10 @@ angular.module('TreeCtrl', [])
 					        .attr("cy", function(d) { return d.y; });
 
 				    });
+
+					function zoomed() {
+					  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+					}
 
 				    function update () {
 
@@ -97,6 +134,9 @@ angular.module('TreeCtrl', [])
 							.style("fill", "#000")
 							.on("click", function (d) {
 								console.log(scope.links);
+								scope.setTitle(d.pid);
+								scope.disable = false;
+								scope.currentpid = d.pid;
 								_.remove(scope.links, function (l) { return l.display == false });
 								console.log(scope.links);
 								_.each(_.map(scope.distsList[d.pid].dists, function (link) {
@@ -123,5 +163,13 @@ angular.module('TreeCtrl', [])
 				    }
 				    update();
 				}
+			}
+		}])
+	.directive("treeSidebar", 
+		[function () {
+			return {
+				link : function () {
+
+				} 
 			}
 		}]);

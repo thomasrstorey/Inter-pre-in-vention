@@ -7,8 +7,8 @@ angular.module('ReaderCtrl', [])
 			$scope.outpoem = "";
 			$http.get('/api/poems/'+$scope.pid)
 				.success(function (data) {
-					$scope.inpoem = data;
-					$scope.formattedStart = toHTML(data);
+					$scope.inpoem = data.text;
+					$scope.formattedStart = toHTML(data.text);
 				})
 				.error(function (data) {
 					console.log("Error: " + data);
@@ -35,6 +35,10 @@ angular.module('ReaderCtrl', [])
 						console.log("error while sending new poem");
 						$location.path('/');
 					});
+			};
+
+			$scope.backToTree = function () {
+				$location.path("/tree/");
 			};
 
 			//utility functions============================

@@ -163,16 +163,46 @@ angular.module('TreeCtrl', [])
 								scope.$apply();
 								node.each(function (ed) {
 									ed.dist = scope.distsList[d.pid].dists[ed.pid].val;
+									d3.select(this)
+									.attr("r", 5)
+									.style("fill", "#000")
+									.on("mouseover", function (d) {
+										d3.select(this).attr("r", 7)
+								  		  .style("fill", "#a55");
+									})
+									.on("mouseout", function (d) {
+										d3.select(this).attr("r", 5)
+								  		  .style("fill", "#000");
+									});
+
 									if(ed.fixed){
 										ed.fixed = false;
 								    }
 								});
+
+								d3.select(this)
+									.attr("r", 8)
+									.style("fill", "#f66")
+									.on("mouseover", function (d) {
+										
+									})
+									.on("mouseout", function (d) {
+										
+									});
 								d.fixed = true;
 								d.px = width/2;
 								d.py = height/2;
 								d.x = width/2;
 								d.y = height/2;
 								force.start();
+							})
+							.on("mouseover", function (d) {
+								d3.select(this).attr("r", 7)
+								  .style("fill", "#a55");
+							})
+							.on("mouseout", function (d) {
+								d3.select(this).attr("r", 5)
+								  .style("fill", "#000");
 							});
 				    }
 

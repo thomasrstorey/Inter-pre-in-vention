@@ -1,7 +1,18 @@
-module.exports = function(app){
+module.exports = function(app, testvar, Poem_Database){
+	//console.log(testvar);
 	
 	var test = require('./controllers/HelloWorld');
-	app.get('/api/HelloWorld',test.respond);
+	app.get('/api/HelloWorld',function(req,res){
+		test.respond(req, res, testvar);
+		/**
+		console.log(testvar);
+		testvar = "Second call"
+		res.send([{
+			id:1,
+			message:'Hello World Works!!',
+			type:'This is only for TEST Purpose'
+		}]);**/
+	});
 	
 
 	/** Routes to be implemented **/
@@ -11,19 +22,32 @@ module.exports = function(app){
 	app.get('/api/list_poems', list_poems.allPoems);
 	app.get('/api/list_poems/:srcPoem', list_poems.fromSrcPoem);
 
-	// to be used ONLY by Dev
-	app.get('/api/list_poems/dev/generate', list_poems.generatePoemFiles);
+
 
 	// GET poem/<pid>
 	var poem = require('./controllers/poem');
-	app.get('/api/poem/:pid', poem.findAndReturnPoemById);
-	app.get('/api/poem/:pTitle', poem.findAndReturnPoemByTitle);
+	app.get('/api/poem', function(req,res){
+		poem.findAndReturnPoemById(req, res, Poem_Database);
+	});
+	app.get('/api/poem', function(req,res){
+		poem.findAndReturnPoemByTitle(req, res, Poem_Database);
+	});
+
 
 	// GET tree/<pid>
 	var tree = require('./controllers/tree');
 	app.get('/api/tree/:pid', tree.findAndReturnTreeBySourcePoemId);
 
+	// GET display/<pid>
+	var display = require('./controllers/display');
+	app.get('/api/display', function(req,res){
+		display.getObjectsToDisplay(req, res, Poem_Database);
+	});
+
+
 	// POST new_poem/<pid>
 	var new_poem = require('./controllers/new_poem');
-	app.post('/api/new_poem', new_poem.onNewPoemGenerated);
+	app.post('/api/new_poem', function(req,res){
+		new_poem.onNewPoemGenerated(req, res, Poem_Database);
+	});
 }

@@ -1,60 +1,58 @@
 angular.module('TreeCtrl', [])
 	.controller('TreeController', 
 		["$scope", "$http", "$routeParams", "$location", function ($scope, $http, $routeParams, $location) {
-			//get the master poems list from the api
+			//declare global scope
 			$scope.nodes = [];
 			$scope.links = [];
 			$scope.dists = [];
+			$scope.lineage = [];
 			$scope.currentTitle = "Choose a poem";
-			$scope.currentpid = null;
+			$scope.currentpid = 0;
 			$scope.disable = true;
-			//Format JSON for d3 Force
-			$http.get('/api/poems_list/')
-				.success(function (data) {
-					$scope.nodes = data;			
-				})
-				.error(function (data) {
-					console.log("Error: " + data);
-				});
-			$http.get('/api/links_list')
-				.success(function (data) {
-					$scope.links = _.map(data, function (o) {
-						return {
-							source: o.source,
-							target: o.target,
-							value: o.value,
-							display: true
-						};
-					});	
-				})
-				.error(function (data) {
-					console.log("Error: " + data);
-				});
-			
 
-			$scope.getDists = function (pid) { //get precomputed levenshtein distances for a selected node
-				$http.get('/api/dists/'+pid)
-				.success(function (obj) {
-					$scope.dists = obj.dists;
+			//called when user insteraction should change what data is visualized
+			//get the nodes, links, dists and lineage relative to the currently selected pid
+			$scope.updateDisplay = function (pid){
+				$http.get('/api/display/?pid='+pid)
+				.success(function (data) {
+					$scope.nodes = data.poem_objects;
+					//filter links to use only those that are in the tree of the currently selected node
+					//reformat for d3
+					//source and target as indices into the nodes array, but are later replaced with references
+					$scope.links = _.map(_.filter(data.object_connections, function (l, i) {
+						return $scope.nodes[pid].orig_src === $scope.nodes[l.source_index].orig_src;
+					}), function (l) {
+						return {source: l.source_index, target: l.target_index, value: 20, display: true};
+					});
+					$scope.dists = data.object_distances;
+					$scope.lineage = data.object_lineage;
+					//remove old invisible links
 					_.remove($scope.links, function (l) { return l.display == false });
+					//create new invisible links 
+					//(used to space nodes according to levenshtein distance)
 					_.each(_.map($scope.dists, function (link) {
-						return {source: pid, target: link.pid, value: link.val, display: false};
+						return {source: pid, target: link.pid, value: link.distance, display: false};
 					}), function (link) {
 						$scope.links.push(link);
-					});
+					});			
 				})
-				.error(function (err) {
-					console.log("Error: " + err);
+				.error(function (data) {
+					console.log("Error: " + data);
 				});
 			}
 
+			//sets the displayed title to that of the currently selected pid
 			$scope.setTitle = function (pid) {
 				$scope.currentTitle = $scope.nodes[pid].title;
 			}
 
+			//change location to the reader view
 			$scope.readPoem = function () {
 				$location.path("/reader/" + $scope.currentpid);
 			}
+
+			//initialize with default poem selected
+			$scope.updateDisplay($scope.currentpid);
 			
 	}])	
 	.directive(
@@ -107,7 +105,7 @@ angular.module('TreeCtrl', [])
 					var link = container.selectAll(".link");
 					var node = container.selectAll(".node");
 
-					scope.$watchGroup(['nodes','links', 'dists'], function () {
+					scope.$watchGroup(['nodes','links', 'dists', 'lineage'], function () {
 						if(scope.nodes.length > 0 && scope.links.length > 0)
 							update();
 					}, true);
@@ -171,7 +169,7 @@ angular.module('TreeCtrl', [])
 						    .charge(-100)
 							.gravity(0.1)
 							.linkDistance(function (d) { return d.value })
-							.linkStrength(function (d) { return d.display ? 1.0 : 1.0})
+							.linkStrength(function (d) { return d.display ? 0.5 : 1.0})
 							.size([width, height])
 						    .start();
 
@@ -190,11 +188,11 @@ angular.module('TreeCtrl', [])
 						node
 							.enter().append("circle")
 							.attr("class", "node")
-							.attr("r", function (d) { return d.orig_src === null ? 8 : 4 })
+							.attr("r", function (d) { return d.orig_src === d.pid ? 8 : 4 })
 							.style("fill", "#000")
 							.on("click", function (d) {
 								scope.setTitle(d.pid);
-								scope.getDists(d.pid);
+								scope.updateDisplay(d.pid);
 								scope.disable = false;
 								scope.currentpid = d.pid;
 								scope.$apply();

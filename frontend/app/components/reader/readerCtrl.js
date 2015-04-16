@@ -5,20 +5,21 @@ angular.module('ReaderCtrl', [])
 			$scope.inpoem = "";
 			$scope.formattedStart = "";
 			$scope.outpoem = "";
-			$http.get('/api/poems/'+$scope.pid)
+			$http.get('/api/poems/?pid='+$scope.pid)
 				.success(function (data) {
-					$scope.inpoem = data;
-					$scope.formattedStart = toHTML(data);
+					$scope.inpoem = data.text;
+					$scope.formattedStart = toHTML(data.text);
 				})
 				.error(function (data) {
-					console.log("Error: " + data);
+					console.log("Error: " + data.Error);
 				});
 
 			$scope.result = "";
 			$scope.interim = "";
 			$scope.formattedResult = "";
 			$scope.listening = false;
-			$scope.togglemsg = "listen";
+			$scope.toggleicon = "fa fa-microphone";
+			$scope.togglemsg = 'Listen';
 			$scope.disable = true;
 
 			$scope.format = function (string) {
@@ -26,15 +27,21 @@ angular.module('ReaderCtrl', [])
 			}
 
 			$scope.addPoem = function () {
-				$http.post('/api/poems/add', {poem: $scope.result})
+				$http.post('/api/poems/add', {pid: $scope.pid, poem: $scope.result})
 					.success(function (data, status) {
 						console.log("poem sent");
-						$location.path('/');
+						//TO DO: Complete progress bar
 					})
 					.error(function (data, status) {
 						console.log("error while sending new poem");
-						$location.path('/');
+						$location.path('/tree/');
 					});
+				//TO DO: Start progress bar from service
+				$location.path('/tree/');
+			};
+
+			$scope.backToTree = function () {
+				$location.path("/tree/");
 			};
 
 			//utility functions============================
@@ -115,7 +122,8 @@ angular.module('ReaderCtrl', [])
 			    	elem.bind ("click", function () {
 						if(scope.listening){
 								scope.$apply(function () {
-									scope.togglemsg = "Listen";
+									scope.togglemsg = 'Listen';
+									scope.toggleicon = "fa fa-microphone";
 									scope.listening = false;
 									scope.disable = false;
 								});
@@ -124,7 +132,8 @@ angular.module('ReaderCtrl', [])
 				    		}
 				    	scope.$apply(function () {
 							scope.listening = true;
-			    		    scope.togglemsg = "Stop listening";
+							scope.toggleicon = 'fa fa-microphone-slash';
+			    		    scope.togglemsg = 'Stop listening';
 			    		    scope.disable = true;
 						});
 			    		recognition.lang = "en-US";

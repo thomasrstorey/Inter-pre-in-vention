@@ -1,4 +1,17 @@
+
 <div class="row">
-<h1>Inter(pre|in)vention</h1>
-<div id="tree-container" tree-canvas="tree"></div>
+	<div class="two-thirds column">
+		<div id="tree-container" tree-canvas></div>
+		<div id="nav-info">
+			<p><i class="fa fa-location-arrow"></i>: click any node to view the poem</p>
+			<p><i class="fa fa-arrows"></i>: click and drag</p>
+			<p><i class="fa fa-search-plus"></i>: scrollwheel</p>
+		</div>
+	</div>
+	<div id="sidebar" class="one-third column">
+		<h5>{{currentTitle}}</h5>
+		<button id="read-button" ng-click="readPoem()" ng-disabled="disable"><i class="fa fa-eye"></i> Read Poem</button>
+		<div id="tree-sidebar" tree-sidebar></div>
+	</div>
+</div>
 </div>

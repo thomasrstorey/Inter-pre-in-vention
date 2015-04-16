@@ -114,7 +114,7 @@ angular.module('TreeCtrl', [])
 					node.append("title")
 						.text(function (d) { return d.title });
 					force.on("tick", function() {
-						force.alpha(0.1);
+						force.alpha(0.01);
 					    link.attr("x1", function(d) { return d.source.x; })
 					        .attr("y1", function(d) { return d.source.y; })
 					        .attr("x2", function(d) { return d.target.x; })

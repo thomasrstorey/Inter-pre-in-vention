@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href="/"></base>
+    <title>Inter(pre|in)vention</title>
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="assets/libs/skeleton-css/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="assets/libs/skeleton-css/css/skeleton.css">
+    
+    <link rel="stylesheet" href="assets/libs/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <!--js-->
+    <script type="text/javascript" src="./assets/libs/angular/angular.js"></script>
+    <script type="text/javascript" src="./assets/libs/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="./assets/libs/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="./assets/libs/threejs/build/three.js"></script>
+    <script type="text/javascript" src="./assets/libs/d3/d3.js"></script>
+    <script type="text/javascript" src="./assets/libs/lodash/lodash.min.js"></script>
+    <!--angular-->
+    <script type="text/javascript" src="./app/components/home/homeCtrl.js"></script>
+    <script type="text/javascript" src="./app/components/tree/treeCtrl.js"></script>
+    <script type="text/javascript" src="./app/components/reader/readerCtrl.js"></script>  
+    <script type="text/javascript" src="./app/app.routes.js"></script>
+    <script type="text/javascript" src="./app/app.module.js"></script>
+
+</head>
+<body ng-app="InterPreInVentionApp" ng-controller="HomeController">
+<!--angular content-->
+ <div id="topbar"  class="row">
+    <h4><a id="topbar-headline" href="/">Inter(pre|in)vention</a></h4>
+    </div>   
+<div id="wrap" class="container">
+	
+    <div ng-view></div>
+
+</div>
+<div id="footer"  class="row">
+    
+</div> 
+
+</body>
+</html>

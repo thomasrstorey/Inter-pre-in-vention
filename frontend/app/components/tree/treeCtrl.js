@@ -26,6 +26,7 @@ angular.module('TreeCtrl', [])
 					});
 					$scope.dists = data.object_distances;
 					$scope.lineage = data.object_lineage;
+
 					//remove old invisible links
 					_.remove($scope.links, function (l) { return l.display == false });
 					//create new invisible links 
@@ -162,6 +163,14 @@ angular.module('TreeCtrl', [])
 						}
 					}
 
+					function inLineage (d) {
+						//TO DO: Use lineage object to determine if a given
+						//link object is in lineage.
+						return _.some(scope.lineage, function (l) {
+							return l.parent === d.source.index && l.child === d.target.index;
+						});
+					}
+
 				    function update () {
 				    	force
 				    		.nodes(scope.nodes)
@@ -177,7 +186,9 @@ angular.module('TreeCtrl', [])
 						link
 							.enter().append("line")
 							.attr("class", "link")
-							.style("stroke-width", function (d) { return 5/generation(d) })
+							.style("stroke-width", function (d) { 
+								return inLineage(d) ? 5 : 2; 
+							})
 						    .style("stroke", "black")
 						    .attr("visibility", function (d) { return d.display ? "visible" : "hidden"});
 						link

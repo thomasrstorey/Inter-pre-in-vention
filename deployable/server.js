@@ -27,6 +27,8 @@
 		var Store = require('jfs');
 		var data_db = new Store('data/poems',{pretty:true});
 		var data_links_db = new Store('data/poems/links',{pretty:true});
+		var data_original_db = new Store('data/originalpoems',{pretty:true});
+		var data_links_original_db = new Store('data/originalpoems/links',{pretty:true});
 		var _ = require('lodash');
 		var levenshtein = require('fast-levenshtein');
 
@@ -42,20 +44,26 @@
 				linksFileJSON.push({"pid":otherpoem.pid, "distance":lev_dist, "metadata":[]});
 
 			});
-			poems[index].poem.links_generated = true;
+			poem.links_generated = true;
 			data_links_db.saveSync(poem.pid, linksFileJSON);
-			//console.log("links_generated", poem.pid);
+			data_links_original_db.saveSync(poem.pid, linksFileJSON);
+			// //console.log("links_generated", poem.pid);
+			// if(index == 10){
+			// 	return false;
+			// }
 			
 		});
 
 		console.log("Now writing Poem_Database file...");
 		data_db.saveSync("Poem_Database", poems);
+		data_links_original_db.saveSync("Poem_Database", poems);
 	}
 
 	generatePoemFiles = function() {
 
 		var Store = require('jfs');
 		var data_db = new Store('data/poems',{pretty:true});
+		var data_original_db = new Store('data/originalpoems',{pretty:true});
 		var _ = require('lodash');
 
 		var poems = require('./data/SourcePoems.json');
@@ -74,19 +82,21 @@
 		});
 
 		data_db.saveSync("Poem_Database", poemsJSON);
+		data_original_db.saveSync("Poem_Database", poemsJSON);
 
 		console.log("SUCCESS: Poem_Database generated!!!");
 	}
 
-	
-	// var startTime = new Date().valueOf();
-	// generatePoemFiles();
-	// console.log('Time taken for Poem_Database generation: ' + (new Date().valueOf() - startTime)/1000 +'seconds');
-	// var startTime1 = new Date().valueOf();
-	// generateBigPoemJSONFileLinks();
-	// console.log('Time taken for links generation: ' + (new Date().valueOf() - startTime1)/1000 +'seconds');
-
-
+	if(process.argv[2] && process.argv[2] == 'pre-process'){
+		//console.log(process.argv[2]);
+		var startTime = new Date().valueOf();
+		generatePoemFiles();
+		console.log('Time taken for Poem_Database generation in seconds: ' + (new Date().valueOf() - startTime)/1000 +'seconds');
+		var startTime1 = new Date().valueOf();
+		generateBigPoemJSONFileLinks();
+		console.log('Time taken for links generation in seconds: ' + (new Date().valueOf() - startTime1)/1000 +'seconds');
+		console.log('All pre-processing completed');
+	}
 
 	var port = process.env.PORT || 8989;
 

@@ -93,7 +93,7 @@
 	exports.onNewPoemGenerated = function(req, res, Poem_Database) {
 
 		var parentpid = req.body.pid;
-		var parentTitle = req.body.pTitle;
+		var parentTitle = req.body.title;
 		var newPoem = req.body.poem;
 		//console.log(parentpid+parentTitle+newPoem);
 

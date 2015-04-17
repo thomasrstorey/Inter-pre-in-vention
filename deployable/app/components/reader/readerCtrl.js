@@ -5,7 +5,7 @@ angular.module('ReaderCtrl', [])
 			$scope.inpoem = "";
 			$scope.formattedStart = "";
 			$scope.outpoem = "";
-			$http.get('/api/poems/?pid='+$scope.pid)
+			$http.get('/api/poem?pid='+$scope.pid)
 				.success(function (data) {
 					$scope.inpoem = data.text;
 					$scope.formattedStart = toHTML(data.text);
@@ -21,13 +21,14 @@ angular.module('ReaderCtrl', [])
 			$scope.toggleicon = "fa fa-microphone";
 			$scope.togglemsg = 'Listen';
 			$scope.disable = true;
+			$scope.title = "";
 
 			$scope.format = function (string) {
 				$scope.formattedResult = toHTML(string);
 			}
 
 			$scope.addPoem = function () {
-				$http.post('/api/poems/add', {pid: $scope.pid, poem: $scope.result})
+				$http.post('/api/new_poem', {pid: $scope.pid, title: $scope.title, poem: $scope.result})
 					.success(function (data, status) {
 						console.log("poem sent");
 						//TO DO: Complete progress bar
@@ -107,6 +108,7 @@ angular.module('ReaderCtrl', [])
 			    				scope.result = finalTranscript;
 			    			    scope.interim = interimTranscript;
 			    			    scope.format(scope.result + scope.interim);
+			    			    scope.title = scope.result.split('\n')[0];
 			    			});
 			    		}
 			    	}

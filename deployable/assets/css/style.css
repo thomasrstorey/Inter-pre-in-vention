@@ -7,6 +7,10 @@ body{
 	height: 100%;
 }
 
+#wrap {
+	max-width: 1600px;
+}
+
 #tree-container{
 	width: 100%;
 	border-right: 1px solid #bbb;

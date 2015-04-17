@@ -56,7 +56,7 @@
 
 		console.log("Now writing Poem_Database file...");
 		data_db.saveSync("Poem_Database", poems);
-		data_links_original_db.saveSync("Poem_Database", poems);
+		data_original_db.saveSync("Poem_Database", poems);
 	}
 
 	generatePoemFiles = function() {

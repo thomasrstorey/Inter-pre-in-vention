@@ -145,7 +145,7 @@
 		data_db.saveSync("Poem_Database", Poem_Database);
 		data_links_db.saveSync(new_pid, linksFileJSON);
 
-		res.send("File write complete");
+		res.json({"newpoem_pid":new_pid});
 	}
 
 })();

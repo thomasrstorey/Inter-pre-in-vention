@@ -29,7 +29,7 @@
 					var links_pid = require("../data/poems/links/"+ poem_pid +".json");
 					res_JSON.object_distances = links_pid;
 
-					/**
+					
 					var poem_ppid = poemObject.parentpid;
 					while(poem_ppid != -1){
 						res_JSON.object_lineage.push(poem_ppid);
@@ -39,7 +39,7 @@
 								return false;
 							}
 						});
-					}**/
+					}
 				}
 			});
 

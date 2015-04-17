@@ -22,24 +22,7 @@
 	  next();
 	});
 
-	var port = process.env.PORT || 8989;
-
-	// Poem_Database
-	var Poem_Database = require('./data/poems/Poem_Database.json');
-
-	//Test
-	var testvar = "First call";
-
-	//Routes addition
-	require('./routes')(app, testvar, Poem_Database);
-
-	//start server
-	console.log("listening on port: " + port);
-	app.listen(port);
-	module.exports = app;
-
-
-
+	
 	generateBigPoemJSONFileLinks = function() {
 		var Store = require('jfs');
 		var data_db = new Store('data/poems',{pretty:true});
@@ -66,7 +49,7 @@
 		});
 
 		console.log("Now writing Poem_Database file...");
-		data_db.save("Poem_Database", poems);
+		data_db.saveSync("Poem_Database", poems);
 	}
 
 	generatePoemFiles = function() {
@@ -95,13 +78,31 @@
 		console.log("SUCCESS: Poem_Database generated!!!");
 	}
 
-	/**
-	var startTime = new Date().valueOf();
-	generatePoemFiles();
-	console.log('Time taken for Poem_Database generation: ' + (new Date().valueOf() - startTime)/1000 +'seconds');
-	var startTime1 = new Date().valueOf();
-	generateBigPoemJSONFileLinks();
-	console.log('Time taken for links generation: ' + (new Date().valueOf() - startTime1)/1000 +'seconds');
-	**/
+	
+	// var startTime = new Date().valueOf();
+	// generatePoemFiles();
+	// console.log('Time taken for Poem_Database generation: ' + (new Date().valueOf() - startTime)/1000 +'seconds');
+	// var startTime1 = new Date().valueOf();
+	// generateBigPoemJSONFileLinks();
+	// console.log('Time taken for links generation: ' + (new Date().valueOf() - startTime1)/1000 +'seconds');
+
+
+
+	var port = process.env.PORT || 8989;
+
+	// Poem_Database
+	var Poem_Database = require('./data/poems/Poem_Database.json');
+
+	//Test
+	var testvar = "First call";
+
+	//Routes addition
+	require('./routes')(app, testvar, Poem_Database);
+
+	//start server
+	console.log("listening on port: " + port);
+	app.listen(port);
+	module.exports = app;
+	
 
 })();

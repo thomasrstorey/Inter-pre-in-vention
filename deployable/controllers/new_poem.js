@@ -12,6 +12,8 @@
 	 ** Output: http status code 200 if successful, if input is wrong send 400, if server messes up, send 500
 	 ** Used to send a newly read poem to the backend to be added to the tree, processed in realtime locally and later processed offline globally
 	 **/
+
+	/**
 	exports.onNewPoemGeneratedTemp = function(req,res) {
 
 		var express = require("express");
@@ -21,10 +23,7 @@
 		//Here we are configuring express to use body-parser as middle-ware.
 		app.use(bodyParser.urlencoded({ extended: false }));
 
-		/*
-		 	** RETRIEVE POST REQUEST PARAMS
-				* MAKE SURE THAT THE REQUEST CONTAINS THE POEM TEXT WITH THE '\n' TAGS
-		*/
+		
 		var parentPID = req.body.pid;
 		var newPoem = req.body.poem;
 
@@ -52,15 +51,6 @@
 	    var parsedPoem, poem, distance;
 	    var jsonString, jsonParsedPoem;
 
-	    /*
-	    	* ITERATE OVER ALL THE POEM JSON FILES PRESENT IN THE DIRECTORY
-	    	* RETRIEVE THE POEM TEXT
-	    	* COMPUTER THE LEVENSHTEIN'S DISTANCE BETWEEN THIS POEM TEXT AND THE NEW
-	    		POEM TEXT
-	    	* WRITE IT TO THE links FIELD IN THE NEW POEM JSON OBJECT
-	    	* ONCE WE ARE DONE WITH THIS FOR ALL THE POEMS JSON FILES PRESENT IN THE DIRECTORY,
-	    		WRITE THE NEW POEM TO THE SAME DIRECTORY AS <PnewPoemObj.pid>.JSON
-	    */
 	    for (var i in files) {
 
 	    	parsedPoem = require(poemsDir + files[i]);
@@ -71,10 +61,7 @@
 			newPoemObj.links.push({pid: parsedPoem.pid, dist: distance});
 	      	jsonString = JSON.stringify(newPoemObj);
 
-	      	/* 	UPDATE THE links FIELD OF THE ALREADY PRESENT POEM WITH THE
-	      		PID OF THE NEW POEM AND THE LEVENSHTEIN'S DISTANCE BETWEEN
-	      		THESE TWO POEMS
-	      	*/
+	      	
 	      	parsedPoem.links.push({pid: newPoemObj.pid, dist: distance});
 	      	jsonParsedPoem = JSON.stringify(parsedPoem);
 	      	fs.writeFileSync(poemsDir + files[i], jsonParsedPoem);
@@ -89,6 +76,7 @@
 	    // POEM FILES) BACK IN THE RESPONSE
 	    res.send('Time taken: ' + (new Date().valueOf() - startTime));
 	}
+	**/
 
 	exports.onNewPoemGenerated = function(req, res, Poem_Database) {
 
@@ -102,7 +90,7 @@
 		var newPoemObj = {};
 
 		newPoemObj.pid = new_pid;
-		newPoemObj.title = parentTitle+new_pid;
+		newPoemObj.title = parentTitle;
 		newPoemObj.poem = newPoem;
 		newPoemObj.parentpid = Number(parentpid);
 		newPoemObj.children = [];
@@ -149,4 +137,3 @@
 	}
 
 })();
-

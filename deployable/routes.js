@@ -17,12 +17,15 @@ module.exports = function(app, testvar, Poem_Database){
 	
 
 	/** Routes to be implemented **/
-
-	// GET list_poems
-	var list_poems = require('./controllers/list_poems');
-	app.get('/api/list_poems', list_poems.allPoems);
-	app.get('/api/list_poems/:srcPoem', list_poems.fromSrcPoem);
-
+	var search_poems = require('./controllers/search_poems');
+	// GET request example ==> http://localhost:8989/api/search_poems/title?searchValue='val'
+	app.get('/api/search_poems/title', function(req,res){
+		search_poems.searchByPoemTitleKeyword(req, res, Poem_Database);
+	});
+	// GET request example ==> http://localhost:8989/api/search_poems/text?searchValue='val'
+	app.get('/api/search_poems/text', function(req,res){
+		search_poems.searchByPoemTextKeyword(req, res, Poem_Database);
+	});
 
 	// GET request example ==> http://localhost:8989/api/poem?pid=0
 	var poem = require('./controllers/poem');
@@ -34,11 +37,11 @@ module.exports = function(app, testvar, Poem_Database){
 		poem.findAndReturnPoemByTitle(req, res, Poem_Database);
 	});
 
-
-	// GET tree/<pid>
-	var tree = require('./controllers/tree');
-	app.get('/api/tree/:pid', tree.findAndReturnTreeBySourcePoemId);
-
+	// GET request example ===> http://localhost:8989/api/originaltree?pid=0
+	var originaltree = require('./controllers/originaltree');
+	app.get('/api/originaltree', function(req,res){
+		originaltree.returnOriginalPoemsSpace(req, res);
+	});
 
 	// GET request example ==> http://localhost:8989/api/display?pid=0
 	var display = require('./controllers/display');

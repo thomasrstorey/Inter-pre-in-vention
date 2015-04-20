@@ -1,44 +1,82 @@
 angular.module('TreeCtrl', [])
 	.controller('TreeController', 
-		["$scope", "$http", "$routeParams", "$location", function ($scope, $http, $routeParams, $location) {
+		["$scope", "$rootScope", "$http", "$routeParams", "$location", function ($scope, $rootScope, $http, $routeParams, $location) {
 			//declare global scope
 			$scope.nodes = [];
 			$scope.links = [];
 			$scope.dists = [];
 			$scope.lineage = [];
 			$scope.currentTitle = "Choose a poem";
-			$scope.currentpid = 0;
+			$rootScope.currentpid = 5;
 			$scope.disable = true;
+			$scope.unwatchGroup;
+			$scope.currentFilter = -1;
+			$scope.filters = [{name: "Engagement, Participation, Interaction", type: 0},
+							  {name: "Potential, Production, Transformation", type: 1},
+							  {name: "Dynamism, Unfolding Landscapes, Evolving Frontiers", type: 2},
+							  {name: "Textual Relationships, Likenesses, Betrayals", type: 3},
+							  {name: "Famous Works", type: 4},
+							  {name: "All", type: 5}];
 
 			//called when user insteraction should change what data is visualized
 			//get the nodes, links, dists and lineage relative to the currently selected pid
-			$scope.updateDisplay = function (pid){
+			$rootScope.updateDisplay = function (pid){
 				$http.get('/api/display/?pid='+pid)
 				.success(function (data) {
-					$scope.nodes = data.poem_objects;
-					//filter links to use only those that are in the tree of the currently selected node
-					//reformat for d3
-					//source and target as indices into the nodes array, but are later replaced with references
-					$scope.links = _.map(_.filter(data.object_connections, function (l, i) {
-						return $scope.nodes[pid].orig_src === $scope.nodes[l.source_index].orig_src;
-					}), function (l) {
-						return {source: l.source_index, target: l.target_index, value: 20, display: true};
-					});
+					//set all nodes to start on screen
+					$scope.nodes = data.poem_objects
+					//$scope.nodes = data.poem_objects;
+					
 					$scope.dists = data.object_distances;
-					$scope.lineage = data.object_lineage;
+					$scope.updateLinks(pid, data.object_connections);
 
-					//remove old invisible links
-					_.remove($scope.links, function (l) { return l.display == false });
-					//create new invisible links 
-					//(used to space nodes according to levenshtein distance)
-					_.each(_.map($scope.dists, function (link) {
-						return {source: pid, target: link.pid, value: link.distance, display: false};
-					}), function (link) {
-						$scope.links.push(link);
-					});			
+					$scope.lineage = data.object_lineage;
+			
 				})
 				.error(function (data) {
 					console.log("Error: " + data);
+				});
+			}
+
+			$scope.getDists = function (pid){
+				$http.get('/api/display/?pid='+pid)
+				.success(function (data) {
+					$scope.dists = data.object_distances;
+				})
+				.error(function (data) {
+					console.log("Error: " + data);
+				});
+			}
+
+			$scope.getBGLinks = function (pid){
+				//remove old invisible links
+				_.remove($scope.links, function (l) { return l.display == false });
+				//create new invisible links 
+				//(used to space nodes according to levenshtein distance)
+				_.each(_.map($scope.dists, function (link) {
+					return {source: pid, target: link.pid, value: link.distance, display: false};
+				}), function (link) {
+					$scope.links.push(link);
+				});
+			}
+
+			$scope.updateLinks = function (pid, data) {
+				//filter links to use only those that are in the tree of the currently selected node
+				//reformat for d3
+				//source and target as indices into the nodes array, but are later replaced with references
+				$scope.links = _.map(_.filter(data, function (l, i) {
+					return $scope.nodes[pid].orig_src === $scope.nodes[l.source_index].orig_src;
+				}), function (l) {
+					return {source: l.source_index, target: l.target_index, value: 20, display: true};
+				});
+				//remove old invisible links
+				_.remove($scope.links, function (l) { return l.display == false });
+				//create new invisible links 
+				//(used to space nodes according to levenshtein distance)
+				_.each(_.map($scope.dists, function (link) {
+					return {source: pid, target: link.pid, value: link.distance, display: false};
+				}), function (link) {
+					$scope.links.push(link);
 				});
 			}
 
@@ -49,11 +87,29 @@ angular.module('TreeCtrl', [])
 
 			//change location to the reader view
 			$scope.readPoem = function () {
-				$location.path("/reader/" + $scope.currentpid);
+				//discard d3 simulation
+				$location.path("/reader/" + $rootScope.currentpid);
 			}
 
+			$scope.$on('$routeChangeStart', function (event, next, current){
+				
+				if(typeof current !== undefined){
+					console.log('change!');
+					$scope.unwatchGroup();
+					$scope.nodes = null;
+					$scope.links = null;
+					$scope.dists = null;
+					$scope.lineage = null;
+					d3.selectAll('.node').remove();
+					d3.selectAll('.link').remove();
+					d3.select('#tree-container').remove();
+					window.onresize = null;
+				}
+				
+			});
+
 			//initialize with default poem selected
-			$scope.updateDisplay($scope.currentpid);
+			$rootScope.updateDisplay($rootScope.currentpid);
 			
 	}])	
 	.directive(
@@ -61,6 +117,7 @@ angular.module('TreeCtrl', [])
 		[function () { //factory function for tree-canvas directive
 			return {
 				link: function (scope, elem, attr) {
+
 					var l = scope.links.length;
 
 					var zoom = d3.behavior.zoom()
@@ -76,7 +133,6 @@ angular.module('TreeCtrl', [])
 					var width = elem[0].clientWidth,
 						height = window.innerHeight-160;
 
-					
 
 					var force = d3.layout.force();
 
@@ -106,7 +162,10 @@ angular.module('TreeCtrl', [])
 					var link = container.selectAll(".link");
 					var node = container.selectAll(".node");
 
-					scope.$watchGroup(['nodes','links', 'dists', 'lineage'], function () {
+					var nodes = scope.nodes.slice();
+					var links = scope.links.slice();
+
+					scope.unwatchGroup = scope.$watchGroup(['nodes','links', 'dists', 'lineage'], function () {
 						if(scope.nodes.length > 0 && scope.links.length > 0)
 							update();
 					}, true);
@@ -114,6 +173,7 @@ angular.module('TreeCtrl', [])
 					node.append("title")
 						.text(function (d) { return d.title });
 					force.on("tick", function() {
+						var a = force.alpha() > 0.01 ? force.alpha() : 0.01;
 						force.alpha(0.01);
 					    link.attr("x1", function(d) { return d.source.x; })
 					        .attr("y1", function(d) { return d.source.y; })
@@ -171,10 +231,83 @@ angular.module('TreeCtrl', [])
 						});
 					}
 
+					scope.filterPoems = function (type) {
+						scope.currentFilter = type;
+						if(type >= 0){
+							nodes = _.filter(scope.nodes, function (n){
+								return n.category === type;
+							});
+							if(!_.some(nodes, function (n) {return scope.$parent.currentpid === n.pid}) ) {
+								scope.$parent.currentpid = _.sample(nodes).pid;
+								var d = node.filter(function (d) {return d.pid === scope.$parent.currentpid});
+								selectPoem(d[0][0].__data__);
+							}
+							scope.getDists(scope.$parent.currentpid);
+							scope.getBGLinks(scope.$parent.currentpid);
+							links = _.filter(scope.links, function (l){
+								return _.some(scope.nodes, function (n) { 
+									return (l.source === n.pid || l.target === n.pid);
+								});
+							});
+
+						} else {
+							nodes = scope.nodes.slice();
+							links = scope.links.slice();
+						}
+					}
+
+					function selectPoem (d) {
+						scope.setTitle(d.pid);
+						scope.getDists(d.pid);
+						scope.getBGLinks(d.pid);
+						scope.disable = false;
+						scope.$parent.currentpid = d.pid;
+						//scope.$apply();
+						node.each(function (ed) {
+							d3.select(this)
+							.attr("r", 4)
+							.style("fill", "#000")
+							.on("mouseover", function (d) {
+								d3.select(this).attr("r", 8)
+						  		  .style("fill", "#a55");
+							})
+							.on("mouseout", function (d) {
+								d3.select(this).attr("r", 4)
+						  		  .style("fill", "#000");
+							});
+							if(ed.fixed){
+								ed.fixed = false;
+						    }
+						});
+						node.filter(function (e) { return e.pid === d.pid })
+							.attr("r", 8)
+							.style("fill", "#f66")
+							.on("mouseover", function (d) {
+								
+							})
+							.on("mouseout", function (d) {
+								
+							});
+					}
+
 				    function update () {
+				    	scope.filterPoems(scope.currentFilter);
+				    	nodes = _.map(nodes, function (po, i) {
+				    		var x, y, fixed;
+				    		if(po.pid === scope.$parent.currentpid){
+				    			x = width/2;
+				    			y = height/2;
+				    			fixed = true;
+				    		} else {
+				    			x = width/2 + Math.cos(i*0.1)*200;
+				    			y = height/2 + Math.sin(i*0.1)*200;
+				    			fixed = false;
+				    		}
+							return _.assign(po, {x:x}, {y:y}, {px:x}, {py:y}, {fixed: fixed}, {category: Math.floor(Math.random()*5)});
+						});
 				    	force
-				    		.nodes(scope.nodes)
-						    .links(scope.links)
+				    		.nodes(nodes)
+						    .links(links)
 						    .charge(-100)
 							.gravity(0.1)
 							.linkDistance(function (d) { return d.value })
@@ -195,53 +328,13 @@ angular.module('TreeCtrl', [])
 							.exit()
 							.remove();
 						
-						node = node.data(scope.nodes);
+						node = node.data(nodes);
 						node
 							.enter().append("circle")
 							.attr("class", "node")
 							.attr("r", function (d) { return d.orig_src === d.pid ? 8 : 4 })
 							.style("fill", "#000")
-							.on("click", function (d) {
-								scope.setTitle(d.pid);
-								scope.updateDisplay(d.pid);
-								scope.disable = false;
-								scope.currentpid = d.pid;
-								scope.$apply();
-								node.each(function (ed) {
-									d3.select(this)
-									.attr("r", 4)
-									.style("fill", "#000")
-									.on("mouseover", function (d) {
-										d3.select(this).attr("r", 8)
-								  		  .style("fill", "#a55");
-									})
-									.on("mouseout", function (d) {
-										d3.select(this).attr("r", 4)
-								  		  .style("fill", "#000");
-									});
-
-									if(ed.fixed){
-										ed.fixed = false;
-								    }
-								});
-
-
-								d3.select(this)
-									.attr("r", 8)
-									.style("fill", "#f66")
-									.on("mouseover", function (d) {
-										
-									})
-									.on("mouseout", function (d) {
-										
-									});
-								d.fixed = true;
-								d.px = width/2;
-								d.py = height/2;
-								d.x = width/2;
-								d.y = height/2;
-								force.start();
-							})
+							.on("click", function (d) {selectPoem(d)})
 							.on("mouseover", function (d) {
 								d3.select(this).attr("r", 8)
 								  .style("fill", "#a55");
@@ -250,7 +343,7 @@ angular.module('TreeCtrl', [])
 								d3.select(this).attr("r", 4)
 								  .style("fill", "#000");
 							})
-							.call(drag);;
+							.call(drag);
 						node
 							.exit()
 							.remove();

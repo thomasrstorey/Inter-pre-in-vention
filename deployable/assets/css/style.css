@@ -74,8 +74,6 @@ body{
 }
 
 #nav-info{
-	position: absolute;
-	bottom: 80px;
-	background-color: rgba(0,0,0,0);
+	
 	color: #555;
 }

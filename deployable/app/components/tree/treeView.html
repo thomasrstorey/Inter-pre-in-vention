@@ -2,15 +2,22 @@
 <div class="row">
 	<div class="two-thirds column">
 		<div id="tree-container" tree-canvas></div>
-		<div id="nav-info">
-			<p><i class="fa fa-location-arrow"></i>: click any node to view the poem</p>
-			<p><i class="fa fa-arrows"></i>: click and drag</p>
-			<p><i class="fa fa-search-plus"></i>: scrollwheel</p>
-		</div>
 	</div>
 	<div id="sidebar" class="one-third column">
 		<h5>{{currentTitle}}</h5>
 		<button id="read-button" ng-click="readPoem()" ng-disabled="disable"><i class="fa fa-eye"></i> Read Poem</button>
+		<hr/>
+		<h5>Search</h5>
+		<input type="text"></input><button><i class="fa fa-search"></i></button>
+		<h5>Filters</h5>
+		<button ng-repeat="f in filters" id="filter-button" ng-click="filterPoems(f.type)">{{f.name}}</button>
+		<hr/>
+		<h5>Controls</h5>
+		<div id="nav-info">
+			<div><i class="fa fa-location-arrow"></i>: click any node to view the poem</div>
+			<div><i class="fa fa-arrows"></i>: click and drag to pan</div>
+			<div><i class="fa fa-search-plus"></i>: scrollwheel to zoom</div>
+		</div>
 		<div id="tree-sidebar" tree-sidebar></div>
 	</div>
 </div>

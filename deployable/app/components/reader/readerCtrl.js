@@ -1,6 +1,6 @@
 angular.module('ReaderCtrl', [])
 	.controller('ReaderController',
-		["$scope", "$http", "$routeParams", "$location", function ($scope, $http, $routeParams, $location) {
+		["$scope", "$http", "$rootScope", "$routeParams", "$location", function ($scope, $http, $rootScope, $routeParams, $location) {
 			$scope.pid = $routeParams.pid;
 			$scope.inpoem = "";
 			$scope.formattedStart = "";
@@ -31,6 +31,8 @@ angular.module('ReaderCtrl', [])
 				$http.post('/api/new_poem', {pid: $scope.pid, title: $scope.title, poem: $scope.result})
 					.success(function (data, status) {
 						console.log("poem sent");
+						$rootScope.currentpid = data.newpoem_pid;
+						$rootScope.updateDisplay($rootScope.currentpid);
 						//TO DO: Complete progress bar
 					})
 					.error(function (data, status) {
@@ -42,6 +44,7 @@ angular.module('ReaderCtrl', [])
 			};
 
 			$scope.backToTree = function () {
+				$scope.$destroy();
 				$location.path("/tree/");
 			};
 

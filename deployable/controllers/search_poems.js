@@ -75,6 +75,9 @@
 					}
 				}
 			});
+
+			//console.log(res_JSON.poem_objects.length);
+
 			res.json(res_JSON);
 		}
 		else{

@@ -67,7 +67,7 @@
 		var _ = require('lodash');
 
 		var poems = require('./data/SourcePoems.json');
-		var categories = require('./data/originalpoems/PoemCategoriesTitle.json');
+		var categories = require('./data/PoemCategoriesTitle.json');
 		var poemsJSON = new Array();
 
 		_.forEach(poems, function(poem, index) {
@@ -81,7 +81,8 @@
 			indexed_poem.category = -1;
 
 			_.forEach(categories, function(category, cat_index){
-				if(category.title == indexed_poem.title){
+				if(category.title.toLowerCase() == indexed_poem.title.toLowerCase()){
+					console.log(category.title);
 					indexed_poem.category = category.type;
 					return false;
 				}

@@ -13,11 +13,11 @@
 
 				//res_JSON.poem_objects.push({"pid":poemObject.pid, "title":poemObject.title, "metadata":[]});
 				if(poemObject.parentpid == -1){
-					res_JSON.poem_objects.push({"pid":poemObject.pid, "title":poemObject.title, "metadata":[{"isSourcePoem":true}]});
+					res_JSON.poem_objects.push({"pid":poemObject.pid, "title":poemObject.title, "orig_src":poemObject.orig_src, "metadata":[{"isSourcePoem":true}]});
 					//res_JSON.poem_objects.metadata.push({"isSourcePoem":true});
 				}
 				else{
-					res_JSON.poem_objects.push({"pid":poemObject.pid, "title":poemObject.title, "metadata":[{"isSourcePoem":false}]});
+					res_JSON.poem_objects.push({"pid":poemObject.pid, "title":poemObject.title, "orig_src":poemObject.orig_src, "metadata":[{"isSourcePoem":false}]});
 					//res_JSON.poem_objects.metadata.push({"isSourcePoem":false});
 				}
 				_.forEach(poemObject.children, function(child, child_index){

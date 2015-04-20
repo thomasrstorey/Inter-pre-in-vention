@@ -2,4 +2,3 @@ frontend/assets/libs/*
 frontend/node_modules/*
 ._*
 .DS_Store
-deployable/data/*

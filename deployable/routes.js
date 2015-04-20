@@ -26,6 +26,10 @@ module.exports = function(app, testvar, Poem_Database){
 	app.get('/api/search_poems/text', function(req,res){
 		search_poems.searchByPoemTextKeyword(req, res, Poem_Database);
 	});
+	// GET request example ==> http://localhost:8989/api/search_poems/category?searchValue='val'
+	app.get('/api/search_poems/category', function(req,res){
+		search_poems.searchByPoemCategory(req, res, Poem_Database);
+	});
 
 	// GET request example ==> http://localhost:8989/api/poem?pid=0
 	var poem = require('./controllers/poem');

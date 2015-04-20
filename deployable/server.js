@@ -67,6 +67,7 @@
 		var _ = require('lodash');
 
 		var poems = require('./data/SourcePoems.json');
+		var categories = require('./data/originalpoems/PoemCategoriesTitle.json');
 		var poemsJSON = new Array();
 
 		_.forEach(poems, function(poem, index) {
@@ -77,8 +78,18 @@
 			indexed_poem.orig_src = index;
 			indexed_poem.parentpid = -1
 			indexed_poem.links_generated = false;
+			indexed_poem.category = -1;
 
+			_.forEach(categories, function(category, cat_index){
+				if(category.title == indexed_poem.title){
+					indexed_poem.category = category.type;
+					return false;
+				}
+			});
 			poemsJSON.push(indexed_poem);
+			// if(index >= 10){
+			// 	return false;
+			// }
 		});
 
 		data_db.saveSync("Poem_Database", poemsJSON);

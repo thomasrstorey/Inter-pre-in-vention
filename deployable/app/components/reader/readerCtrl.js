@@ -1,6 +1,6 @@
 angular.module('ReaderCtrl', [])
 	.controller('ReaderController',
-		["$scope", "$http", "$rootScope", "$routeParams", "$location", function ($scope, $http, $rootScope, $routeParams, $location) {
+		["$scope", "$http", "$rootScope", "$routeParams", "$location", "ngProgress", function ($scope, $http, $rootScope, $routeParams, $location, ngProgress) {
 			$scope.pid = $routeParams.pid;
 			$scope.inpoem = "";
 			$scope.formattedStart = "";
@@ -34,12 +34,14 @@ angular.module('ReaderCtrl', [])
 						$rootScope.currentpid = data.newpoem_pid;
 						$rootScope.updateDisplay($rootScope.currentpid);
 						//TO DO: Complete progress bar
+						ngProgress.complete();
 					})
 					.error(function (data, status) {
 						console.log("error while sending new poem");
 						$location.path('/tree/');
 					});
 				//TO DO: Start progress bar from service
+				ngProgress.start();
 				$location.path('/tree/');
 			};
 

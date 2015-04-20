@@ -8,9 +8,9 @@
 		<button id="read-button" ng-click="readPoem()" ng-disabled="disable"><i class="fa fa-eye"></i> Read Poem</button>
 		<hr/>
 		<h5>Search</h5>
-		<input type="text"></input><button><i class="fa fa-search"></i></button>
+		<input ng-model="searchKey" type="text"></input><button id="search-button" ng-click="searchByKey(searchKey)"><i class="fa fa-search"></i></button>
 		<h5>Filters</h5>
-		<button ng-repeat="f in filters" id="filter-button" ng-click="filterPoems(f.type)">{{f.name}}</button>
+		<button ng-repeat="f in filters" id="filter-button" ng-click="searchByCategory(f.type)">{{f.name}}</button>
 		<hr/>
 		<h5>Controls</h5>
 		<div id="nav-info">

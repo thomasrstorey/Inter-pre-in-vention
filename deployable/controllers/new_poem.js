@@ -81,7 +81,7 @@
 	exports.onNewPoemGenerated = function(req, res, Poem_Database) {
 
 		var parentpid = req.body.pid;
-		var parentTitle = req.body.title;
+		var newTitle = req.body.title;
 		var newPoem = req.body.poem;
 		//console.log(parentpid+parentTitle+newPoem);
 
@@ -90,7 +90,7 @@
 		var newPoemObj = {};
 
 		newPoemObj.pid = new_pid;
-		newPoemObj.title = parentTitle;
+		newPoemObj.title = newTitle;
 		newPoemObj.poem = newPoem;
 		newPoemObj.parentpid = Number(parentpid);
 		newPoemObj.children = [];
@@ -100,6 +100,7 @@
 		_.forEach(Poem_Database, function(poemObject, index) {
 			if(poemObject.pid == parentpid){
 				newPoemObj.orig_src = poemObject.orig_src;
+				poemObject.children.push({"pid":new_pid,"title":newTitle});
 				return false;
 			}
 		});

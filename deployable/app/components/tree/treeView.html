@@ -4,21 +4,22 @@
 		<div id="tree-container" tree-canvas></div>
 	</div>
 	<div id="sidebar" class="one-third column">
-		<h5>{{currentTitle}}</h5>
-		<button id="read-button" ng-click="readPoem()" ng-disabled="disable"><i class="fa fa-eye"></i> Read Poem</button>
-		<hr/>
-		<h5>Search</h5>
-		<input ng-model="searchKey" type="text"></input><button id="search-button" ng-click="searchByKey(searchKey)"><i class="fa fa-search"></i></button>
-		<h5>Filters</h5>
-		<button ng-repeat="f in filters" id="filter-button" ng-click="searchByCategory(f.type)">{{f.name}}</button>
-		<hr/>
-		<h5>Controls</h5>
-		<div id="nav-info">
-			<div><i class="fa fa-location-arrow"></i>: click any node to view the poem</div>
-			<div><i class="fa fa-arrows"></i>: click and drag to pan</div>
-			<div><i class="fa fa-search-plus"></i>: scrollwheel to zoom</div>
+		<div id="sidebar-wrapper">
+			<h5>{{currentTitle}}</h5>
+			<button id="read-button" ng-click="readPoem()" ng-disabled="disable"><i class="fa fa-eye"></i> Read Poem</button>
+			<hr/>
+			<h5>Search</h5>
+			<input ng-model="searchKey" type="text"></input><button id="search-button" ng-click="searchByKey(searchKey)"><i class="fa fa-search"></i></button>
+			<h5>Filters</h5>
+			<button ng-repeat="f in filters" id="filter-button" ng-click="searchByCategory(f.type)">{{f.name}}</button>
+			<hr/>
+			<h5>Controls</h5>
+			<div id="nav-info">
+				<div><i class="fa fa-location-arrow"></i>: click any node to view the poem</div>
+				<div><i class="fa fa-arrows"></i>: click and drag to pan</div>
+				<div><i class="fa fa-search-plus"></i>: scrollwheel to zoom</div>
+			</div>
 		</div>
-		<div id="tree-sidebar" tree-sidebar></div>
 	</div>
 </div>
 </div>

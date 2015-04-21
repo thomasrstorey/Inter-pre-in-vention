@@ -1,18 +1,22 @@
 
 <div class="row" id="poems">
 	<div class="two-thirds column" id="prompt">
+	<div id="prompt-wrapper">
 	<div class="row">
 	<button id="back-button" ng-click="backToTree()"><i class="fa fa-chevron-left"></i></button>
 	<button id="listenToggle" listener><i ng-class="toggleicon"></i> {{togglemsg}}</button>
 	</div>
 	<span ng-bind-html="formattedStart"></span>
 	</div>
+	</div>
 	<div class="one-third column" id="result">
+	<div id="result-wrapper">
 	<div class="row">
 	<button id="send-button" ng-click="addPoem()" ng-disabled="disable"><i class="fa fa-paper-plane-o"></i> Send Poem</button>
 	</div>
 	<div class="row">
 	<span ng-bind-html="formattedResult"></span>
+	</div>
 	</div>
 	</div>
 </div>

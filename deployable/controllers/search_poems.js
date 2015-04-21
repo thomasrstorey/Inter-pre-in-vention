@@ -62,7 +62,7 @@
 
 		var res_JSON = {"poem_objects":[]};
 
-		if(searchVal && searchVal !=''){
+		if(searchVal && searchVal > 0) {
 			_.forEach(Poem_Database, function(poemObject, index) {
 				if(poemObject.category == searchVal){
 					if(poemObject.parentpid == -1){

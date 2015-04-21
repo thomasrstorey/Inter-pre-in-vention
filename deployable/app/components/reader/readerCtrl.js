@@ -113,7 +113,7 @@ angular.module('ReaderCtrl', [])
 			    				scope.result = finalTranscript;
 			    			    scope.interim = interimTranscript;
 			    			    scope.format(scope.result + scope.interim);
-			    			    scope.title = scope.result.split('\n')[0];
+			    			    scope.title = _.take(scope.result.split(' '), Math.floor(Math.random()*4)+4).join(' ');
 			    			});
 			    		}
 			    	}

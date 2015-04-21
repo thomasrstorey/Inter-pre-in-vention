@@ -82,28 +82,32 @@ angular.module('TreeCtrl', [])
 			}
 
 			$scope.filterPoems = function (query) {
-				/*$http.post(query)
+				$http.get(query)
 				.success(function (data) {
-					searchedpids = data.pids;
+					console.log(data);
+					$scope.searchedpids = _.map(data.poem_objects, function (po) {
+						return po.pid;
+					});
+					console.log($scope.searchedpids);
 				})
 				.error(function (err) {
 					console.log(err);
-				});*/
+				});
 				//test drawing
-				var start = Math.floor(Math.random()*900);
-				$scope.searchedpids = _.range(start, start+25);
+				/*var start = Math.floor(Math.random()*900);
+				$scope.searchedpids = _.range(start, start+25);*/
 			}
 
 			$scope.searchByCategory = function (type) {
 				if(type === -1){
 					$scope.searchedpids = [];
 				} else {
-					$scope.filterPoems('/api/search/category?searchValue='+type);
+					$scope.filterPoems('/api/search_poems/category?searchValue='+type);
 				}	
 			}
 
 			$scope.searchByKey = function (key) {
-				$scope.filterPoems('/api/search/text?searchValue='+key);
+				$scope.filterPoems('/api/search_poems/text?searchValue='+key);
 			}
 
 			//sets the displayed title to that of the currently selected pid

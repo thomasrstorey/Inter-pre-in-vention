@@ -2,22 +2,23 @@ angular.module('TreeCtrl', [])
 	.controller('TreeController', 
 		["$scope", "$rootScope", "$http", "$routeParams", "$location", "ngProgress", function ($scope, $rootScope, $http, $routeParams, $location, ngProgress) {
 			//declare global scope
-			$scope.nodes = [];
-			$scope.links = [];
-			$scope.dists = [];
-			$scope.searchedpids = [];
+
+			$scope.nodes = new Array();
+			$scope.links = new Array();
+			$scope.dists = new Array();
+			$scope.searchedpids = new Array();
 			$scope.searchKey = "";
-			$scope.lineage = [];
+			$scope.lineage = new Array();
 			$scope.currentTitle = "Choose a poem";
 			$rootScope.currentpid = $rootScope.currentpid || 0;
 			$scope.disable = true;
 			$scope.unwatchGroup;
 			$scope.currentFilter = -1;
-			$scope.filters = [{name: "Engagement, Participation, Interaction", type: 0},
-							  {name: "Potential, Production, Transformation", type: 1},
-							  {name: "Dynamism, Unfolding Landscapes, Evolving Frontiers", type: 2},
-							  {name: "Textual Relationships, Likenesses, Betrayals", type: 3},
-							  {name: "Famous Works", type: 4},
+			$scope.filters = [{name: "Engagement, Participation, Interaction", type: 1},
+							  {name: "Potential, Production, Transformation", type: 2},
+							  {name: "Dynamism, Unfolding Landscapes, Evolving Frontiers", type: 3},
+							  {name: "Textual Relationships, Likenesses, Betrayals", type: 4},
+							  {name: "Famous Works", type: 5},
 							  {name: "All", type: -1}];
 
 			//called when user insteraction should change what data is visualized
@@ -32,32 +33,10 @@ angular.module('TreeCtrl', [])
 					$scope.updateLinks(pid, data.object_connections);
 
 					$scope.lineage = data.object_lineage;
-			
+					
 				})
 				.error(function (data) {
 					console.log("Error: " + data);
-				});
-			}
-
-			$scope.getDists = function (pid){
-				$http.get('/api/display/?pid='+pid)
-				.success(function (data) {
-					$scope.dists = data.object_distances;
-				})
-				.error(function (data) {
-					console.log("Error: " + data);
-				});
-			}
-
-			$scope.getBGLinks = function (pid){
-				//remove old invisible links
-				_.remove($scope.links, function (l) { return l.display == false });
-				//create new invisible links 
-				//(used to space nodes according to levenshtein distance)
-				_.each(_.map($scope.dists, function (link) {
-					return {source: pid, target: link.pid, value: link.distance, display: false};
-				}), function (link) {
-					$scope.links.push(link);
 				});
 			}
 
@@ -84,18 +63,13 @@ angular.module('TreeCtrl', [])
 			$scope.filterPoems = function (query) {
 				$http.get(query)
 				.success(function (data) {
-					console.log(data);
 					$scope.searchedpids = _.map(data.poem_objects, function (po) {
 						return po.pid;
 					});
-					console.log($scope.searchedpids);
 				})
 				.error(function (err) {
 					console.log(err);
 				});
-				//test drawing
-				/*var start = Math.floor(Math.random()*900);
-				$scope.searchedpids = _.range(start, start+25);*/
 			}
 
 			$scope.searchByCategory = function (type) {
@@ -214,11 +188,11 @@ angular.module('TreeCtrl', [])
 						if(scope.nodes.length > 0 && scope.links.length > 0)
 							update();
 					}, true);
-
-					scope.$watch('searchedpids', function () {
-						if(scope.nodes.length > 0 && scope.links.length > 0)
+					scope.$watchCollection('searchedpids', function () {
+						if(scope.nodes.length > 0 && scope.links.length > 0){
 							updateOpacity();
-					})
+						}
+					});
 					
 					node.append("title")
 						.text(function (d) { return d.title });
@@ -261,7 +235,7 @@ angular.module('TreeCtrl', [])
 
 			        function selectPoem (d) {
 						scope.setTitle(d.pid);
-						scope.updateDisplay(d.pid);
+						scope.$parent.$parent.updateDisplay(d.pid);
 						scope.disable = false;
 						scope.$parent.$parent.currentpid = d.pid;
 						node.each(function (ed) {
@@ -291,6 +265,7 @@ angular.module('TreeCtrl', [])
 							.on("mouseout", function (d) {
 								
 							});
+						
 					}
 
 				    function update () {
@@ -298,6 +273,7 @@ angular.module('TreeCtrl', [])
 				    	//get local nodes/links arrays from scope arrays
 				    	nodes = scope.nodes.slice();
 						links = scope.links.slice();
+						
 						//set intial positions of nodes
 				    	nodes = _.map(nodes, function (po, i) {
 				    		var x, y, fixed;
@@ -323,7 +299,8 @@ angular.module('TreeCtrl', [])
 							.size([width, height])
 						    .start();
 
-						link = link.data(scope.links);
+						link = link.data(links);
+
 						link
 							.enter().append("line")
 							.attr("class", "link")
@@ -335,7 +312,7 @@ angular.module('TreeCtrl', [])
 						link
 							.exit()
 							.remove();
-						
+						updateChildLinks();
 						node = node.data(nodes);
 						node
 							.enter().append("circle")
@@ -374,6 +351,14 @@ angular.module('TreeCtrl', [])
 				    	node.style("opacity", function (d) {return inSearch(d) ? inOpactiy : outOpacity});
 				    }
 
+				    function updateChildLinks () {
+				    	link
+				    		.attr("visibility", function (d) { return d.display ? "visible" : "hidden"})
+				    		.style("stroke-width", function (d) { 
+								return inLineage(d) ? 5 : 2; 
+							});
+				    }
+
 			        //UTILITY ==============================================================================================
 
 					function generation (d, count) {
@@ -396,7 +381,7 @@ angular.module('TreeCtrl', [])
 						//TO DO: Use lineage object to determine if a given
 						//link object is in lineage.
 						return _.some(scope.lineage, function (l) {
-							return l.parent === d.source.index && l.child === d.target.index;
+							return l === d.source.index || l === d.target.index;
 						});
 					}
 

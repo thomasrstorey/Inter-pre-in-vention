@@ -82,7 +82,7 @@
 
 			_.forEach(categories, function(category, cat_index){
 				if(category.title.toLowerCase() == indexed_poem.title.toLowerCase()){
-					console.log(category.title);
+					//console.log(category.title);
 					indexed_poem.category = category.type;
 					return false;
 				}

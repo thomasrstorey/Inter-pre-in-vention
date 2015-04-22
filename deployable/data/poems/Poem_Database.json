@@ -866,7 +866,7 @@
     "poem_num": 0,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 79,
@@ -1268,12 +1268,7 @@
     "pid": 115,
     "title": "As if some little Arctic flower",
     "poem": "As if some little Arctic flower\nUpon the polar hem-\nWent wandering down the Latitudes\nUntil it puzzled came\nTo continents of summer-\nTo firmaments of sun-\nTo strange, bright crowds of flowers-\nAnd birds, of foreign tongue!\nI say, As if this little flower\nTo Eden, wandered in-\nWhat then? Why nothing,\nOnly, your inference therefrom!\n",
-    "children": [
-      {
-        "pid": 1000,
-        "title": "as if some little Arctic flower"
-      }
-    ],
+    "children": [],
     "orig_src": 115,
     "poem_num": 180,
     "parentpid": -1,
@@ -1458,14 +1453,14 @@
   },
   {
     "pid": 132,
-    "title": "Because I could not stop for Death (712)",
+    "title": "Because I could not stop for Death",
     "poem": "Because I could not stop for Death--\nHe kindly stopped for me--\nThe Carriage held but just Ourselves--\nAnd Immortality.\nWe slowly drove--He knew no haste\nAnd I had put away\nMy labor and my leisure too,\nFor His Civility--\nWe passed the School, where Children strove\nAt Recess--in the Ring--\nWe passed the Fields of Gazing Grain--\nWe passed the Setting Sun--\nOr rather--He passed us--\nThe Dews drew quivering and chill--\nFor only Gossamer, my Gown--\nMy Tippet--only Tulle--\nWe paused before a House that seemed\nA Swelling of the Ground--\nThe Roof was scarcely visible--\nThe Cornice--in the Ground--\nSince then--'tis Centuries--and yet\nFeels shorter than the Day\nI first surmised the Horses' Heads\nWere toward Eternity--\n",
     "children": [],
     "orig_src": 132,
     "poem_num": 0,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 133,
@@ -1938,7 +1933,7 @@
     "poem_num": 997,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 176,
@@ -2653,7 +2648,7 @@
     "poem_num": 624,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 241,
@@ -3790,14 +3785,14 @@
   },
   {
     "pid": 344,
-    "title": "I felt a Funeral, in my Brain (280)",
+    "title": "I felt a Funeral, in my Brain",
     "poem": "I felt a Funeral, in my Brain,\nAnd Mourners to and fro\nKept treading--treading--till it seemed\nThat Sense was breaking through--\nAnd when they all were seated,\nA Service, like a Drum--\nKept beating--beating--till I thought\nMy Mind was going numb--\nAnd then I heard them lift a Box\nAnd creak across my Soul\nWith those same Boots of Lead, again,\nThen Space--began to toll,\nAs all the Heavens were a Bell,\nAnd Being, but an Ear,\nAnd I, and Silence, some strange Race\nWrecked, solitary, here--\nAnd\nAnd\nAnd\nAnd\nthen a Plank in Reason, broke,\nI dropped down, and down--\nhit a World, at every plunge,\nFinished knowing--then--\n",
     "children": [],
     "orig_src": 344,
     "poem_num": 0,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 345,
@@ -4230,14 +4225,14 @@
   },
   {
     "pid": 384,
-    "title": "I measure every Grief I meet (561)",
+    "title": "I measure every Grief I meet",
     "poem": "I measure every Grief I meet\nWith narrow, probing, Eyes--\nI wonder if It weighs like Mine--\nOr has an Easier size.\nI wonder if They bore it long--\nOr did it just begin--\nI could not tell the Date of Mine--\nIt feels so old a pain--\nI wonder if it hurts to live--\nAnd if They have to try--\nAnd whether--could They choose between--\nIt would not be--to die--\nI note that Some--gone patient long--\nAt length, renew their smile--\nAn imitation of a Light\nThat has so little Oil--\nI wonder if when Years have piled--\nSome Thousands--on the Harm--\nThat hurt them early--such a lapse\nCould give them any Balm--\nOr would they go on aching still\nThrough Centuries of Nerve--\nEnlightened to a larger Pain--\nIn Contrast with the Love--\nThe Grieved--are many--I am told--\nThere is the various Cause--\nDeath--is but one--and comes but once--\nAnd only nails the eyes--\nThere's Grief of Want--and grief of Cold--\nA sort they call \"Despair\"--\nThere's Banishment from native Eyes--\nIn Sight of Native Air--\nAnd though I may not guess the kind--\nCorrectly--yet to me\nA piercing Comfort it affords\nIn passing Calvary--\nTo note the fashions--of the Cross--\nAnd how they're mostly worn--\nStill fascinated to presume\nThat Some--are like My Own--\n",
     "children": [],
     "orig_src": 384,
     "poem_num": 0,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 385,
@@ -9807,14 +9802,14 @@
   },
   {
     "pid": 891,
-    "title": "There's a certain Slant of light (258)",
+    "title": "There's a certain Slant of light",
     "poem": "There's a certain Slant of light,\nWinter Afternoons--\nThat oppresses, like the Heft\nOf Cathedral Tunes--\nHeavenly Hurt, it gives us--\nWe can find no scar,\nBut internal difference,\nWhere the Meanings, are--\nNone may teach it--Any--\n'Tis the Seal Despair--\nAn imperial affliction\nSent us of the air--\nWhen it comes, the Landscape listens--\nShadows--hold their breath--\nWhen it goes, 'tis like the Distance\nOn the look of Death--\n",
     "children": [],
     "orig_src": 891,
     "poem_num": 0,
     "parentpid": -1,
     "links_generated": true,
-    "category": -1
+    "category": 5
   },
   {
     "pid": 892,
@@ -11003,30 +10998,5 @@
     "parentpid": -1,
     "links_generated": true,
     "category": -1
-  },
-  {
-    "pid": 1000,
-    "title": "as if some little Arctic flower",
-    "poem": "as if some little Arctic flower\n upon the polar him went wandering down the latitudes till it puzzled came two continents of some departments of Sun\n two strange bright backgrounds of flowers and birds of 4 in time\n I say as if this little flower to eat in Wonderland\n what then why nothing only your inference they're from",
-    "parentpid": 115,
-    "children": [
-      {
-        "pid": 1001,
-        "title": "as if some little Arctic flower upon the polar him with wandering down the latitude to let puzzled came two continents of some departments of Sun to strange bright backgrounds of flowers and birds of four in time I say as if the little flower to eat in Wonderland what then why nothing only your and Friends hair from"
-      }
-    ],
-    "poem_num": -1,
-    "links_generated": true,
-    "orig_src": 115
-  },
-  {
-    "pid": 1001,
-    "title": "as if some little Arctic flower upon the polar him with wandering down the latitude to let puzzled came two continents of some departments of Sun to strange bright backgrounds of flowers and birds of four in time I say as if the little flower to eat in Wonderland what then why nothing only your and Friends hair from",
-    "poem": "as if some little Arctic flower upon the polar him with wandering down the latitude to let puzzled came two continents of some departments of Sun to strange bright backgrounds of flowers and birds of four in time I say as if the little flower to eat in Wonderland what then why nothing only your and Friends hair from",
-    "parentpid": 1000,
-    "children": [],
-    "poem_num": -1,
-    "links_generated": true,
-    "orig_src": 115
   }
 ]

@@ -139,9 +139,13 @@ angular.module('TreeCtrl', [])
 					var inOpacity = 1.0;
 					var outOpacity = 0.2;
 
+					var width = elem[0].clientWidth,
+						height = window.innerHeight-160;
 
 					var zoom = d3.behavior.zoom()
 							    .scaleExtent([-1, 10]) //-1 means zoom out is unbounded
+							    .translate([width/3,height/3])
+							    .scale(0.3)
 							    .on("zoom", zoomed);
 					//replace default drag because we need to be able to drag the svg canvas
 					//as well as the individual nodes
@@ -150,10 +154,6 @@ angular.module('TreeCtrl', [])
 			            .on("dragstart", dragstarted)
 			            .on("drag", dragged)
 			            .on("dragend", dragended);
-
-					var width = elem[0].clientWidth,
-						height = window.innerHeight-160;
-
 
 					var force = d3.layout.force();
 
@@ -165,7 +165,8 @@ angular.module('TreeCtrl', [])
 					var container = svg.append("g")
 					    .attr("width", width)
 					    .attr("height", height)
-					    .style("fill", "none");	
+					    .style("fill", "none")
+				    	.attr("transform", "translate(" + width/3 + ", " + height/3 + ")scale(0.3, 0.3)");
 					  
 					function resize () {
 						var width = elem[0].clientWidth,

@@ -50,6 +50,22 @@ angular.module('ReaderCtrl', [])
 				$location.path("/tree/");
 			};
 
+			/*$scope.scrollIndicator = function () {
+				var oi = document.getElementById("overflow-indicator");
+	    		var pw = document.getElementById("prompt-wrapper");
+
+	    		pw.addEventListener("scroll", scrollIndication);
+
+	    		function scrollIndication (event) {
+	    			
+	    			if(pw.offsetHeight + pw.scrollTop === pw.scrollHeight){
+	    				oi.className = 'fa fa-minus';
+	    			} else {
+	    				oi.className = 'fa fa-chevron-down';
+	    			}
+	    		}
+			};*/
+
 			//utility functions============================
 			var toHTML = function(string){
 				//cap with <p> and </p>
@@ -62,6 +78,7 @@ angular.module('ReaderCtrl', [])
 				return formattedLines.join("\n");
 			}
 
+		
 
 
 		}])
@@ -83,8 +100,6 @@ angular.module('ReaderCtrl', [])
 			    	var toid;
 		    		recognition.continuous = true;
 		    		recognition.interimResults = true;
-
-
 
 			    	recognition.onstart = function () {
 			    		
@@ -113,7 +128,7 @@ angular.module('ReaderCtrl', [])
 			    				scope.result = finalTranscript;
 			    			    scope.interim = interimTranscript;
 			    			    scope.format(scope.result + scope.interim);
-			    			    scope.title = _.take(scope.result.split(' '), Math.floor(Math.random()*4)+4).join(' ');
+			    			    scope.title = _.take(scope.result.split(' '), Math.floor(Math.random()*5)+4).join(' ');
 			    			});
 			    		}
 			    	}
@@ -148,4 +163,31 @@ angular.module('ReaderCtrl', [])
 					});
 				}
 			}
-		}]);
+		}])
+	.directive(
+			"readerPrompt",
+			[function () {
+				return {
+					link: function (scope, elem, attr) {
+						scope.$watch(function () {
+							return elem[0].clientHeight;
+						}, function (v) {
+							var oi = document.getElementById("overflow-indicator");
+							if(elem[0].scrollHeight > elem[0].clientHeight){
+			    				oi.style.visibility = "visible";
+				    		} else {
+				    			oi.style.visibility = "hidden";
+				    		}
+						});
+
+						elem.bind("scroll", function () {
+							var oi = document.getElementById("oi-icon");
+							if(elem[0].offsetHeight + elem[0].scrollTop === elem[0].scrollHeight){
+			    				oi.className = 'fa fa-minus';
+			    			} else {
+			    				oi.className = 'fa fa-chevron-down';
+			    			}
+						})
+					}
+				}
+			}]);

@@ -63,8 +63,13 @@ angular.module('TreeCtrl', [])
 				link: function (scope, elem, attr) {
 					var l = scope.links.length;
 
+					var width = elem[0].clientWidth,
+						height = window.innerHeight-160;
+
 					var zoom = d3.behavior.zoom()
 							    .scaleExtent([-1, 10])
+							    .translate([width/2,height/2])
+							    .scale(0.5)
 							    .on("zoom", zoomed);
 
 					var drag = d3.behavior.drag()
@@ -73,8 +78,7 @@ angular.module('TreeCtrl', [])
 			            .on("drag", dragged)
 			            .on("dragend", dragended);
 
-					var width = elem[0].clientWidth,
-						height = window.innerHeight-160;
+					
 
 					
 
@@ -98,7 +102,8 @@ angular.module('TreeCtrl', [])
 				    		.attr("height", height);
 				    	container
 				    		.attr("width", width)
-				    		.attr("height", height);
+				    		.attr("height", height)
+				    		.attr("transform", "translate(" + width/2 + ", " + height/2 + ")scale(0.5, 0.5)");
 				    }
 
 				    window.onresize = resize; 
@@ -131,7 +136,7 @@ angular.module('TreeCtrl', [])
 
 					function dragstarted(d) {
 			          d3.event.sourceEvent.stopPropagation();
-			          
+			          	
 			          d3.select(this).classed("dragging", true);
 			          force.start();
 			        }

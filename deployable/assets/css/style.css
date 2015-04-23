@@ -10,6 +10,19 @@ body{
 	max-width: 1600px;
 }
 
+#about-poem {
+	text-align: center;
+}
+
+#overflow-indicator {
+	font-size: 2.0rem;
+	color: #bbb;
+	position: absolute;
+	bottom:1.5rem;
+	left:-40px;
+	visibility: hidden;
+}
+
 #tree-container{
 	width: 100%;
 	border-right: 1px solid #bbb;

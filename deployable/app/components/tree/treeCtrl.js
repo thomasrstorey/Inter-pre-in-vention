@@ -143,7 +143,7 @@ angular.module('TreeCtrl', [])
 						height = window.innerHeight-160;
 
 					var zoom = d3.behavior.zoom()
-							    .scaleExtent([-1, 10]) //-1 means zoom out is unbounded
+							    .scaleExtent([0.1, 10]) //-1 means zoom out is unbounded
 							    .translate([width/3,height/3])
 							    .scale(0.3)
 							    .on("zoom", zoomed);
